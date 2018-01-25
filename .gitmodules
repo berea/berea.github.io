@@ -1,0 +1,4 @@
+[submodule "pattonj"]
+	path = pattonj
+	url = https://github.com/berea/pattonj.git
+	branch = origin/master
