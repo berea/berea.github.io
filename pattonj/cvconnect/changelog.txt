@@ -51,3 +51,10 @@ V0.9.6
 - Removed visit session options for summer use and until new schedule is set. 
 - Changed timeout for date changes as it was runnign before date was updated. 
 - Tweaked HSname to copy the name if HSname and HS code was not empty, but HS transcript name was. 
+
+V0.9.6.1
+- Fixed update error, no ID. 
+
+V0.9.6.2
+- Version to test update ability. 
+
