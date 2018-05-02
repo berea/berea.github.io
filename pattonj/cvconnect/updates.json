@@ -1,9 +1,9 @@
 {
   "addons": {
-    "addon@example.com": {
+    "{b7f297aa-297d-4603-8ccb-f01e0e98359f}": {
       "updates": [
-        { "version": "0.9.6",
-          "update_link": "https://berea.github.io/pattonj/cvconnect/ffextension/berea_college_connect_autofill-0.9.6-an+fx.xpi" }
+        { "version": "0.9.6.2",
+          "update_link": "https://berea.github.io/pattonj/cvconnect/ffextension/berea_college_connect_autofill-0.9.6.2-an+fx.xpi" }
         
       ]
     }
