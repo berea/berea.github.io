@@ -58,3 +58,8 @@ V0.9.6.1
 V0.9.6.2
 - Version to test update ability. 
 
+V0.9.7
+- Removed Interview score double check
+- Updated Campus Visit itinerary. 
+- Added function to reduce the visit type list and Academic Intiative List
+
