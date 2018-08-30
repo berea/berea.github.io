@@ -235,10 +235,6 @@ function adjustVisitTypeDropdown(){
 					dropdown.remove(i);
 					i--;
 					break;
-				case "Campus Tour Only":
-					dropdown.remove(i);
-					i--;
-					break;
 				case "Weekday Morning Session":
 					dropdown.remove(i);
 					i--;
@@ -267,7 +263,7 @@ function adjustVisitTypeDropdown(){
 
 //Creates the main button.
 function createCVItineraryButton() {
-	if(checkViewFields(["text598","text3381","text3321","text3341","text4581","text4541","text4681","text4627","text4589","text4543","text4683","text4629","text4591","text4545","text4685","text4631","text4593","text4547","text4687","text4633","text4595","text4549","text4689","text4635","text4597","text4551","text4691","text4637","text4599","text4553","text4693","text4639","text4601","text4555","text4695","text4641","text4603","text4557","text4697","text4643","text4605","text4559"])){
+	if(checkViewFields(["text697_0","text598","text598","text3381","text3321","text3341","text4581","text4541","text4681","text4627","text4589","text4543","text4683","text4629","text4591","text4545","text4685","text4631","text4593","text4547","text4687","text4633","text4595","text4549","text4689","text4635","text4597","text4551","text4691","text4637","text4599","text4553","text4693","text4639","text4601","text4555","text4695","text4641","text4603","text4557","text4697","text4643","text4605","text4559"])){
 
 	/*Dropdown menu from here https://www.w3schools.com/howto/howto_js_dropdown.asp*/
 	//Create our HTML to inject.
@@ -299,6 +295,7 @@ function createCVItineraryButton() {
 	document.getElementById("Group_PM").addEventListener("click",function(){creatCVItinerary(6);});
 	document.getElementById("Clear_Session").addEventListener("click",clearCVItinerary);
 	adjustVisitTypeDropdown();
+	
 	
 
 	/*Just as a side note incase I ever need to insert a script code 
@@ -337,9 +334,24 @@ function showCVItineraryMenu() {
 }
 
 //Creates the itinerary and fills in the fields
-//I could reduce the lines of code to fill in the activity, location and detail, and then separate times
-//but I kept them apart so that in the future if they need to be different they can
 function creatCVItinerary(x){
+	
+		//Clear Counselor Plug-in
+		var len = 1;
+		for (var i = 0; i < len;i++){
+			if(document.getElementById('text7481_'+i) != null){
+				//console.log(document.getElementById('text7481_'+i).value);
+				if (document.getElementById('text7481_'+i).checked == true){
+					document.getElementById('text7481_'+i).checked = false;
+				}
+				len++;
+			}
+			
+		}
+		
+		
+		//Clear Sent Itinerary. 
+		document.getElementById('text697_0').checked = true;
 	
 	if(x === 1){
 		//With Class sit-in
@@ -813,10 +825,10 @@ function checkCVResDateChange(){
 function setArrivalTime(){
 	switch (document.getElementById("text598").value){
 		case "MWF - NO class":
-			document.getElementById("text3381").value = "10:00 a.m.";
+			document.getElementById("text3381").value = "11:15 a.m.";
 			break;
 		case "MWF - YES class":
-			document.getElementById("text3381").value = "11:15 a.m.";
+			document.getElementById("text3381").value = "10:00 a.m.";
 			break;
 		case "TR - AM":
 			document.getElementById("text3381").value = "8:45 a.m.";
@@ -874,7 +886,7 @@ function setEEDate(EEName,EEDate,EEShadowName){
 
 //-----------//High School Transcript and Guidance Counselor View//-----------//
 function createHSTranscriptAndPercentListeners(){
-	if(checkViewFields(["numeric273","numeric277","text1415","text3265","hsname","text1501","numeric7963","date7349Date","hscode"])){
+	if(checkViewFields(["text3703","numeric273","numeric277","text1415","text3265","hsname","text1501","numeric7963","date7349Date","hscode"])){
 		checkHSTranscriptNameChange();
 		adjustAcademicInitiativeDropdown();
 		//Class Rank Field
