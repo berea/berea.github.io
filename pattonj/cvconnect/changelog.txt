@@ -63,7 +63,9 @@ V0.9.7
 - Updated Campus Visit itinerary. 
 - Added function to reduce the visit type list and Academic Intiative List
 
-V0.9.7
+V0.9.7.1
 - Fixed arrival time for reservations screen. 
 - Added function to remove counselor plug-in options that are checked and send itinerary. 
 
+V0.9.7.2
+- Added "tour only" back to the list of campus visit types. 
