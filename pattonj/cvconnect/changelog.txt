@@ -69,3 +69,6 @@ V0.9.7.1
 
 V0.9.7.2
 - Added "tour only" back to the list of campus visit types. 
+
+V0.9.7.3
+- Added itinerary for Legacy Preview Day Event on 10/5/18

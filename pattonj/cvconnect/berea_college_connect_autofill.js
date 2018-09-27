@@ -280,11 +280,17 @@ function createCVItineraryButton() {
 		"<hr>"+
 		"<a href='#' ID='Group_AM' onclick='return false;'>Group AM</a>"+
 		"<a href='#' ID='Group_PM' onclick='return false;'>Group PM</a>"+
+		"<hr id='Event_Break_Line'>"+
+		"<a href='#' ID='Legacy_Preview18' onclick='return false;'>Legacy Preview</a>"+
 		"<hr>"+
 		"<a href='#' ID='Clear_Session'onclick='return false;' >Clear Sessions</a>"+
 	  "</div></div>";
+	
 	var buttonRow = document.getElementsByClassName('triggerBtnsTop');
+	
 	buttonRow[0].appendChild(bereaButton);
+	
+	
 	//Set even listeners "click" for the buttons above.
 	document.getElementById("Berea_Menu_Button").addEventListener("click",showCVItineraryMenu);
 	document.getElementById("MWF_No_Class").addEventListener("click",function(){creatCVItinerary(1);});
@@ -293,6 +299,19 @@ function createCVItineraryButton() {
 	document.getElementById("T_PM").addEventListener("click",function(){creatCVItinerary(4);});
 	document.getElementById("Group_AM").addEventListener("click",function(){creatCVItinerary(5);});
 	document.getElementById("Group_PM").addEventListener("click",function(){creatCVItinerary(6);});
+		
+	//Before creating the event button, check for event date. 
+	var EventDate = new Date('2018-10-06');
+	var CurrentDate = new Date();
+	if(EventDate > CurrentDate){
+		document.getElementById("Legacy_Preview18").addEventListener("click",function(){creatCVItinerary(7);});
+	}else {
+		var element = document.getElementById("Legacy_Preview18");
+		element.parentNode.removeChild(element);
+		element = document.getElementById("Event_Break_Line");
+		element.parentNode.removeChild(element);
+	}
+	
 	document.getElementById("Clear_Session").addEventListener("click",clearCVItinerary);
 	adjustVisitTypeDropdown();
 	
@@ -690,6 +709,65 @@ function creatCVItinerary(x){
 		//activity 10
 		document.getElementById('text4697').value ="";
 		document.getElementById('text4643').value ="";
+		document.getElementById('text4605').value ="";
+		document.getElementById('text4559').value ="";
+		return false;
+	
+	//For Events
+	} else if( x === 7) {
+	
+		//Visit Type
+		document.getElementById('text598').value ="Legacy Preview";
+		//Arrival Time
+		document.getElementById('text3381').value ="9:15 a.m.";
+		//activity 1 (Activity, time, location, detail)
+		document.getElementById('text3321').value ="Registration";
+		document.getElementById('text3341').value ="9:15 a.m.";
+		document.getElementById('text4581').value ="Haaga House";
+		document.getElementById('text4541').value ="- Lobby";
+		//activity 2
+		document.getElementById('text4681').value ="Welcome";
+		document.getElementById('text4627').value ="10:00 a.m.";
+		document.getElementById('text4589').value ="Cargill Natural Sciences and Health Building";
+		document.getElementById('text4543').value ="- Digital Theatre";
+		//activity 3
+		document.getElementById('text4683').value ="Attend a Class";
+		document.getElementById('text4629').value ="10:40 a.m.";
+		document.getElementById('text4591').value ="";
+		document.getElementById('text4545').value ="";
+		//activity 4
+		document.getElementById('text4685').value ="Information Session";
+		document.getElementById('text4631').value ="12:00 p.m.";
+		document.getElementById('text4593').value ="Woods-Penniman";
+		document.getElementById('text4547').value ="- Commons";
+		//activity 5
+		document.getElementById('text4687').value ="Lunch";
+		document.getElementById('text4633').value ="12:30 p.m.";
+		document.getElementById('text4595').value ="Dining Services";
+		document.getElementById('text4549').value ="";
+		//activity 6
+		document.getElementById('text4689').value ="Tour and Swag Session";
+		document.getElementById('text4635').value ="1:45 p.m.";
+		document.getElementById('text4597').value ="";
+		document.getElementById('text4551').value ="With Student Ambassador";
+		//activity 7
+		document.getElementById('text4691').value ="Specialized Visit";
+		document.getElementById('text4637').value ="3:40 p.m.";
+		document.getElementById('text4599').value ="";
+		document.getElementById('text4553').value ="";
+		//activity 8
+		document.getElementById('text4693').value ="Meet with Counselor";
+		document.getElementById('text4639').value ="4:30 p.m.";
+		document.getElementById('text4601').value ="Haaga House";
+		document.getElementById('text4555').value ="";
+		//activity 9
+		document.getElementById('text4695').value ="Dinner";
+		document.getElementById('text4641').value ="5:30 p.m.";
+		document.getElementById('text4603').value ="Haaga House";
+		document.getElementById('text4557').value ="";
+		//activity 10
+		document.getElementById('text4697').value ="Depart from Campus";
+		document.getElementById('text4643').value ="8:00 p.m.";
 		document.getElementById('text4605').value ="";
 		document.getElementById('text4559').value ="";
 		return false;
