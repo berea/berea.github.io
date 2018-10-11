@@ -72,3 +72,7 @@ V0.9.7.2
 
 V0.9.7.3
 - Added itinerary for Legacy Preview Day Event on 10/5/18
+
+V0.9.7.4
+- Tweaked the campus visit itinerary times. 
+

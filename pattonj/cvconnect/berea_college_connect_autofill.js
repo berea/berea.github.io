@@ -440,7 +440,7 @@ function creatCVItinerary(x){
 		document.getElementById('text4541').value ="- Lobby";
 		//activity 2
 		document.getElementById('text4681').value ="Admissions Video";
-		document.getElementById('text4627').value ="10:15 a.m.";
+		document.getElementById('text4627').value ="10:10 a.m.";
 		document.getElementById('text4589').value ="Haaga House";
 		document.getElementById('text4543').value ="- Presentation Room";
 		//activity 3
@@ -449,15 +449,15 @@ function creatCVItinerary(x){
 		document.getElementById('text4591').value ="";
 		document.getElementById('text4545').value ="";
 		//activity 4
-		document.getElementById('text4685').value ="Lunch";
+		document.getElementById('text4685').value ="Information Session";
 		document.getElementById('text4631').value ="12:00 p.m.";
-		document.getElementById('text4593').value ="Dining Services";
-		document.getElementById('text4547').value ="- Mountaineer Dining Hall";
+		document.getElementById('text4593').value ="Haaga House";
+		document.getElementById('text4547').value ="- Presentation Room";
 		//activity 5
-		document.getElementById('text4687').value ="Information Session";
-		document.getElementById('text4633').value ="1:15 p.m.";
-		document.getElementById('text4595').value ="Haaga House";
-		document.getElementById('text4549').value ="- Presentation Room";
+		document.getElementById('text4687').value ="Lunch";
+		document.getElementById('text4633').value ="12:30 p.m.";
+		document.getElementById('text4595').value ="Dining Services";
+		document.getElementById('text4549').value ="- Mountaineer Dining Hall";
 		//activity 6
 		document.getElementById('text4689').value ="Tour and Swag Session";
 		document.getElementById('text4635').value ="1:45 p.m.";
