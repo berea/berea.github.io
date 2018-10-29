@@ -1,42 +1,43 @@
 
 //----------------------------------------------
-// Used for Berea College Hobsons Connect to populate various fields	
-// Created by Jacob Patton (C) 2017,2018				
+//Used for Berea College Hobsons Connect to populate various fields
+//Created by Jacob Patton (C) 2017,2018
 //----------------------------------------------
 
 setListener();
 
-// variables
-var currentLocation; 	// What's my URL? 
-var viewDropDownValue; 	// What's the view? 
-var visitDate;			// What date mm/dd/yyyy am I visiting? (CV Registration View)
-var feeDate;			// What date mm/dd/yyyy was the deposit paid? (Dec of Intent View)
-var fieldInterval;		// Loop for watching field
-var highSchoolName;		// What is the current High School Name? (HS Transcript/Counselor Evaluation Form View)
-var currentTime;		// Used to set date fields. 
-var attempts = 0; 		// Used to check how many attempts to load a view. Assumes that not all views are broken. 
 
-//on load, set main listener for dropdown view. 
+//variables
+var currentLocation;	//What's my URL?
+var viewDropDownValue;	//What's the view?
+var visitDate;			//What date mm/dd/yyyy am I visiting? (CV Registration View)
+var feeDate;			//What date mm/dd/yyyy was the deposit paid? (Dec of Intent View)
+var fieldInterval;		//Loop for watching field
+var highSchoolName;		//What is the current High School Name? (HS Transcript/Counselor Evaluation Form View)
+var currentTime;		//Used to set date fields.
+var attempts = 0;		//Used to check how many attempts to load a view. Assumes that not all views are broken.
+
+//on load, set main listener for dropdown view.
 function setListener() {
-	
+
 	currentLocation = window.location.pathname;
 	if(currentLocation === "/admin/Contacts/Search" || currentLocation === "/admin/Contacts/View" || currentLocation === "/admin/Contacts/Edit"){
-		
+
 		//Replaced "contactViews", "editMode" and "newMode" event listeners with mutationObserver
 		//The "Loading" screen generally runs, but if you click "edit" or "view" from the search screen, it doesn't.
 		//Since the mutation observer wouldn't do any good, we need to run viewUpdate.
 		 loadingScreenMutationObserver();
-		 
-		//Now run view change update for the first time since they may go straight to edit mode. 
+
+		//Now run view change update for the first time since they may go straight to edit mode.
 		viewUpdate();
 	}
-	
-	
+
+
 
 }
 
 function loadingScreenMutationObserver(){
-	// Example for Mutaion Observer - https://www.javascripture.com/MutationObserver
+	//Example for Mutaion Observer - https://www.javascripture.com/MutationObserver
 		var LSmutationObserver = new MutationObserver(function(mutations) {
 			mutations.forEach(function(mutation) {
 				for (var i = 0; i < mutation.removedNodes.length; i++) {
@@ -44,12 +45,12 @@ function loadingScreenMutationObserver(){
 					console.log("Loading Block Removed - Running viewUpdate");
 					viewUpdate();
 					}
-				}	
-	  
+				}
+
 			});
 		});
-				
-		// Starts listening for changes in the searchField HTML element of the page.
+
+		//Starts listening for changes in the searchField HTML element of the page.
 		LSmutationObserver.observe(document.getElementById("searchFields"), {
 			attributes: false,
 			characterData: false,
@@ -58,39 +59,40 @@ function loadingScreenMutationObserver(){
 			attributeOldValue: false,
 			characterDataOldValue: false
 		});
-// With the mutation observer, it loads the "Loading..." BlockUI box, removed the elements and HTML
-// then once ready, removes the "Loading... block" ("blockUI blockOverlay" and "blockUI blockMsg blockElement" and adds the new fields. 
+//With the mutation observer, it loads the "Loading..." BlockUI box, removed the elements and HTML
+//then once ready, removes the "Loading... block" ("blockUI blockOverlay" and "blockUI blockMsg blockElement" and adds the new fields.
 }
 
 //view change function
 function viewUpdate(reloaded){
 	console.log("View Update starting");
-	//Make sure we clear interval for the field if we are watching for a change. 
+	//Make sure we clear interval for the field if we are watching for a change.
 	clearInterval(fieldInterval);
-	
-	//Used to reset attempts to zero since we are not just retrying the viewUpdate function. 
+
+	//Used to reset attempts to zero since we are not just retrying the viewUpdate function.
 	if(reloaded !== true){
 		attempts = 0;
 	}
-	
-	//Remove the BereaButton so we can recreate it if needed. 
+
+	//Remove the BereaButton so we can recreate it if needed.
 	if (document.contains(document.getElementById('bereaButton'))){
 		var oldButton = document.getElementById("bereaButton");
 		oldButton.remove();
 	}
-		
-	//Get the title of the selected dropdown value and remove * (default view symbol if needed. 
+
+	//Get the title of the selected dropdown value and remove * (default view symbol if needed.
 	viewDropDownValue = document.getElementById("contactViews").options[document.getElementById("contactViews").selectedIndex].title;
 	if( viewDropDownValue.slice(-1)==="*"){
 		viewDropDownValue = viewDropDownValue.slice(0, -1);
-	} 
-	
-	//Rewrote as a switch instead of if/else since I added actions. 
+	}
+
+	//Rewrote as a switch instead of if/else since I added actions.
 	switch (viewDropDownValue){
 		case "Campus Visit Itinerary":
 			fieldWatch("text598",createCVItineraryButton);
 			break;
 		case "Campus Visit Reservation":
+			visitIndicatorChecks(1);
 			fieldWatch("date602Date",createCVReservationDateListener);
 			break;
 		case "HS Transcript / Counselor Evaluation Form":
@@ -98,7 +100,7 @@ function viewUpdate(reloaded){
 			break;
 		case "Evaluations and Endorsements":
 			fieldWatch("text219",createEEListeners);
-			break;	
+			break;
 		case "Dec of Intent / Ent Fee / Non-Enrolling Form":
 			fieldWatch ("date2951Date",createFeeDateListener);
 			break;
@@ -110,44 +112,47 @@ function viewUpdate(reloaded){
 			break;
 		default:
 			break;
-			
+
 	}
 	console.log("View Update completed");
-		
+
 }
 
-//look for the field I need to edit to exist. 
+//look for the field I need to edit to exist.
 function fieldWatch(myField,myFunction){
 	console.log("fieldwatch start");
-	//set loop looking for the field I passed to exist and be editable. 
+	//set loop looking for the field I passed to exist and be editable.
 	fieldInterval = setInterval(function () {
 		if(document.contains(document.getElementById(myField))){
-			if (document.getElementById(myField).disabled === false) {  
-	
-				//Once available and editable, stop looking and run the passed function. 
+			if (document.getElementById(myField).disabled === false) {
+
+				//Once available and editable, stop looking and run the passed function.
 				clearInterval(fieldInterval);
-				
-				console.log("Watched Field Found");
+
+				console.log("Watched Field Found, running " + myFunction.name);
 				myFunction();
+				console.log("function was run");
+
 			}
 			else{
-				// since it exists and isn't edible, stop watching. 
+				//since it exists and isn't edible, stop watching.
 				clearInterval(fieldInterval);
 			}
-		
-		} 	
+
+		}
 		else{
 			console.log("Watched field not found");
+
 		}
-		
-		
-    }, 100);
+
+
+	}, 100);
 }
 
 
 //-----------//Multi-use functions//-----------//
 
-//Clear if they select OK from the confirm box on click. 
+//Clear if they select OK from the confirm box on click.
 function clearDateChange(myDateField){
 	if(myDateField.value === ""){
 		alert("Please use date picker to set the date.");
@@ -158,14 +163,14 @@ function clearDateChange(myDateField){
 			return;
 		}
 	}
-	
+
 }
 
-//Sets the current date for the passed date field. 
+//Sets the current date for the passed date field.
 function setDateField(myDateField){
 	currentTime = new Date();
 	document.getElementById(myDateField).value = (currentTime.getMonth() + 1) +"/"+currentTime.getDate()+"/"+currentTime.getFullYear();
-	
+
 }
 
 //Checking to see if the fields that are modified exist.
@@ -177,18 +182,19 @@ function checkViewFields(viewFields){
 				attempts++;
 				console.log("Error:failed to find field " + viewFields[i]);
 				return false;
-			} 				
+			}
 		}
+		console.log("checkViewFields complete"); 
 		attempts = 0;
 		return true;
 }
 
 function recheckViewFields(){
-	//15 (*150 for the field watch timer is 3 seconds) should be long enough to it to try several times. 
+	//15 (*150 for the field watch timer is 3 seconds) should be long enough to it to try several times.
 	if(attempts >= 15){
 		alert("The Berea Connect add-on has encountered an error. Please refresh the view. \n\n If you continue to see this message, please email jacob_patton@berea.edu");
 	}else{
-		//run the viewUpdate again since we assume the field wasn't ready yet. 
+		//run the viewUpdate again since we assume the field wasn't ready yet.
 		viewUpdate(true);
 	}
 }
@@ -198,18 +204,18 @@ function recheckViewFields(){
 //Campus Visit Functions
 //--------------
 //https://stackoverflow.com/questions/7601691/remove-item-from-dropdown-list-on-page-load-no-jquery
-// Used on multiple screens to reduce the visit type list. 
+//Used on multiple screens to reduce the visit type list.
 function adjustVisitTypeDropdown(){
-	//Get the visit type dropdown. 
+	//Get the visit type dropdown.
 	var dropdown=document.getElementById('text598');
 	var dropdownOption;
-	
-	for (var i=0;i<dropdown.length;  i++) {
+
+	for (var i=0;i<dropdown.length;	 i++) {
 		//Get the value of i for visit type;
 		dropdownOption = dropdown.options[i].value;
-		//Make sure what we are removing isn't the current one selected. 
+		//Make sure what we are removing isn't the current one selected.
 		if (dropdownOption !== dropdown.value){
-			//If it isn't, then we can remove it. 
+			//If it isn't, then we can remove it.
 			switch (dropdownOption){
 				case "Carter G. Woodson":
 					dropdown.remove(i);
@@ -252,11 +258,11 @@ function adjustVisitTypeDropdown(){
 					break;
 			}
 		}
-		  
+
 	}
 
 
-	
+
 }
 
 //-----------//Campus Visits Itinerary View//-----------//
@@ -285,12 +291,12 @@ function createCVItineraryButton() {
 		"<hr>"+
 		"<a href='#' ID='Clear_Session'onclick='return false;' >Clear Sessions</a>"+
 	  "</div></div>";
-	
+
 	var buttonRow = document.getElementsByClassName('triggerBtnsTop');
-	
+
 	buttonRow[0].appendChild(bereaButton);
-	
-	
+
+
 	//Set even listeners "click" for the buttons above.
 	document.getElementById("Berea_Menu_Button").addEventListener("click",showCVItineraryMenu);
 	document.getElementById("MWF_No_Class").addEventListener("click",function(){creatCVItinerary(1);});
@@ -299,8 +305,8 @@ function createCVItineraryButton() {
 	document.getElementById("T_PM").addEventListener("click",function(){creatCVItinerary(4);});
 	document.getElementById("Group_AM").addEventListener("click",function(){creatCVItinerary(5);});
 	document.getElementById("Group_PM").addEventListener("click",function(){creatCVItinerary(6);});
-		
-	//Before creating the event button, check for event date. 
+
+	//Before creating the event button, check for event date.
 	var EventDate = new Date('2018-10-06');
 	var CurrentDate = new Date();
 	if(EventDate > CurrentDate){
@@ -311,25 +317,25 @@ function createCVItineraryButton() {
 		element = document.getElementById("Event_Break_Line");
 		element.parentNode.removeChild(element);
 	}
-	
+
 	document.getElementById("Clear_Session").addEventListener("click",clearCVItinerary);
 	adjustVisitTypeDropdown();
-	
-	
 
-	/*Just as a side note incase I ever need to insert a script code 
+
+
+	/*Just as a side note incase I ever need to insert a script code
 	https://www.danielcrabtree.com/blog/25/gotchas-with-dynamically-adding-script-tags-to-html*/
 	} else{
 		recheckViewFields();
 	}
-	
+
 }
 
 //Shows the dropdown menu
-function showCVItineraryMenu() { 
+function showCVItineraryMenu() {
 
 			document.getElementById('BereaMenu').classList.toggle('show');
-			
+
 			window.onclick = function(event) {
 				//Close the dropdown menu if the user clicks outside of it
 			  if (!event.target.matches('.BereaBlue')) {
@@ -346,59 +352,58 @@ function showCVItineraryMenu() {
 				  return ;
 			  }
 			};
-			
-		
-			
-		  
+
+
+
+
 }
 
 //Creates the itinerary and fills in the fields
 function creatCVItinerary(x){
-	
+
 		//Clear Counselor Plug-in
 		var len = 1;
 		for (var i = 0; i < len;i++){
 			if(document.getElementById('text7481_'+i) != null){
-				//console.log(document.getElementById('text7481_'+i).value);
 				if (document.getElementById('text7481_'+i).checked == true){
 					document.getElementById('text7481_'+i).checked = false;
 				}
 				len++;
 			}
-			
+
 		}
-		
-		
-		//Clear Sent Itinerary. 
+
+
+		//Clear Sent Itinerary.
 		document.getElementById('text697_0').checked = true;
-	
+
 	if(x === 1){
 		//With Class sit-in
-		
+
 		//Visit Type
 		document.getElementById('text598').value ="MWF - NO class";
 		//Arrival Time
-		document.getElementById('text3381').value ="11:15 a.m.";
+		document.getElementById('text3381').value ="11:30 a.m.";
 		//activity 1 (Activity, time, location, detail)
 		document.getElementById('text3321').value ="Arrive on Campus";
-		document.getElementById('text3341').value ="11:15 a.m.";
+		document.getElementById('text3341').value ="11:30 a.m.";
 		document.getElementById('text4581').value ="Haaga House";
 		document.getElementById('text4541').value ="- Lobby";
 		//activity 2
 		document.getElementById('text4681').value ="Admissions Video";
-		document.getElementById('text4627').value ="11:30 a.m.";
+		document.getElementById('text4627').value ="11:45 a.m.";
 		document.getElementById('text4589').value ="Haaga House";
 		document.getElementById('text4543').value ="- Presentation Room";
 		//activity 3
-		document.getElementById('text4683').value ="Lunch";
+		document.getElementById('text4683').value ="Information Session";
 		document.getElementById('text4629').value ="12:00 p.m.";
-		document.getElementById('text4591').value ="Dining Services";
-		document.getElementById('text4545').value ="- Mountaineer Dining Hall";
+		document.getElementById('text4591').value ="Haaga House";
+		document.getElementById('text4545').value ="- Presentation Room";
 		//activity 4
-		document.getElementById('text4685').value ="Information Session";
-		document.getElementById('text4631').value ="1:15 p.m.";
-		document.getElementById('text4593').value ="Haaga House";
-		document.getElementById('text4547').value ="- Presentation Room";
+		document.getElementById('text4685').value ="Lunch";
+		document.getElementById('text4631').value ="12:30 p.m.";
+		document.getElementById('text4593').value ="Dining Services";
+		document.getElementById('text4547').value ="- Mountaineer Dining Hall";
 		//activity 5
 		document.getElementById('text4687').value ="Tour and Swag Session";
 		document.getElementById('text4633').value ="1:45 p.m.";
@@ -424,11 +429,11 @@ function creatCVItinerary(x){
 		document.getElementById('text4641').value ="5:00 p.m.";
 		document.getElementById('text4603').value ="";
 		document.getElementById('text4557').value ="";
-		
+
 	return false;
 	} else if(x === 2){
 		//With Class sit-in
-		
+
 		//Visit Type
 		document.getElementById('text598').value ="MWF - YES class";
 		//Arrival Time
@@ -483,7 +488,7 @@ function creatCVItinerary(x){
 		document.getElementById('text4643').value ="5:00 p.m.";
 		document.getElementById('text4605').value ="";
 		document.getElementById('text4559').value ="";
-		
+
 	return false;
 	} else if( x === 3) {
 		//Visit Type
@@ -542,7 +547,7 @@ function creatCVItinerary(x){
 		document.getElementById('text4559').value ="";
 		return false;
 	} else if( x === 4) {
-		
+
 		//Visit Type
 		document.getElementById('text598').value ="T - PM";
 		//Arrival Time
@@ -599,7 +604,7 @@ function creatCVItinerary(x){
 		document.getElementById('text4559').value ="";
 		return false;
 	} else if( x === 5) {
-		
+
 		//Visit Type
 		document.getElementById('text598').value ="Group Visit - AM";
 		//Arrival Time
@@ -656,7 +661,7 @@ function creatCVItinerary(x){
 		document.getElementById('text4559').value ="";
 		return false;
 } else if( x === 6) {
-		
+
 		//Visit Type
 		document.getElementById('text598').value ="Group Visit - PM";
 		//Arrival Time
@@ -712,10 +717,10 @@ function creatCVItinerary(x){
 		document.getElementById('text4605').value ="";
 		document.getElementById('text4559').value ="";
 		return false;
-	
+
 	//For Events
 	} else if( x === 7) {
-	
+
 		//Visit Type
 		document.getElementById('text598').value ="Legacy Preview";
 		//Arrival Time
@@ -834,31 +839,84 @@ function clearCVItinerary(){
 
 
 //-----------//Campus Visit Reservation View//-----------//
-	
+
 function createCVReservationDateListener(){
-	if(checkViewFields(["date602Date","text598","text4421","text3381"])){
+	if(checkViewFields(["date602Date","text598","text4421","text3381","text4061","text3983"])){
 		visitDate = document.getElementById("date602Date").value;
-		//Blank ability set through confirm box yes/no.  
+		//Blank ability set through confirm box yes/no.
 		document.getElementById("date602Date").addEventListener("click",function(){clearDateChange(document.getElementById("date602Date"));});
 		document.getElementById("date602Date").addEventListener("keydown",function(e){e.preventDefault(); alert("Please use date picker to set the date.");});
 		document.getElementById("date602Date").addEventListener("focusout",checkCVResDateChange);
 		document.getElementById("text598").addEventListener("change",setArrivalTime);
+		document.getElementById("text3983").addEventListener("change",function(){visitIndicatorChecks(2);});
+		document.getElementById("text4061").addEventListener("change",function(){visitIndicatorChecks(2);});
+		visitIndicatorChecks(2);
+
 		adjustVisitTypeDropdown();
 	} else{
 		recheckViewFields();
 	}
 }
 
-//pauses long enough wait for the date to be populated and then compare, and if needed set day. 
+//highlights contacts that are not financially eligible or not allowed to visit
+function visitIndicatorChecks(x){
+	var checkInnerText;
+	var checkInnerLabel;
+	var rowLength;
+	//1 is used view is changed/updated to highlight the fields in view mode.
+	if(x==1){
+		//check to see if the text field exists
+		if(document.querySelectorAll('.col2 .formtable > tbody > tr .text')[0] !== undefined){
+			//get the number of rows in the table
+			 rowLength = document.querySelector('.col2 .formtable > tbody').rows.length;
+			//check the labels cell, if it matches, then see what the coresponding text is (innertext), and then highlight if needed.
+			for (var i = 0; i < rowLength; i++) {
+				checkInnerLabel = document.querySelectorAll('.col2 .formtable > tbody > tr .fieldlable-mid')[i].innerText;
+				if (checkInnerLabel === "Financially Qualify Indicator:"){
+					checkInnerText = document.querySelectorAll('.col2 .formtable > tbody > tr .text')[i].innerText;
+					if(checkInnerText == "No (No)" || checkInnerText== "FEC - Flag (FEC - Flag)" || checkInnerText== "FEC - Removed (FEC - Removed)"){
+						document.querySelectorAll('.col2 .formtable > tbody > tr .text')[i].style.backgroundColor = "#ff717a";
+					}
+				}else if(checkInnerLabel === "Visit Allowed?:"){
+						checkInnerText = document.querySelectorAll('.col2 .formtable > tbody > tr .text')[i].innerText;
+					if(checkInnerText == "No (No)"){
+						document.querySelectorAll('.col2 .formtable > tbody > tr .text')[i].style.backgroundColor = "#ff717a";
+					}
+				}
+			}
+		}
+	}
+	//2 is used when in edit mode.
+	if (x==2){
+		//check the values to see if they need highlighed.
+		 checkInnerText=document.getElementById("text3983").value;
+		if(checkInnerText == "No" || checkInnerText== "FEC - Flag" || checkInnerText== "FEC - Removed"){
+			document.getElementById("text3983").style.backgroundColor = "#ff717a";
+
+		}else{
+			document.getElementById("text3983").style.backgroundColor = "#ffffff";
+			}
+		if(document.getElementById("text4061").value == "No"){
+			document.getElementById("text4061").style.backgroundColor = "#ff717a";
+		}else{
+			document.getElementById("text4061").style.backgroundColor = "#ffffff";
+			}
+	}
+}
+
+
+
+
+//pauses long enough wait for the date to be populated and then compare, and if needed set day.
 function checkCVResDateChange(){
 	console.log("Focused out");
 	setTimeout( function(){
-	console.log("timeout set");	
-	if(document.getElementById("date602Date").value !==""){	
+	console.log("timeout set");
+	if(document.getElementById("date602Date").value !==""){
 	console.log("not empty");
 		var newVal = document.getElementById("date602Date").value;
 		//set loop looking for the field to exist and be editable.
-		if (visitDate === newVal) {  
+		if (visitDate === newVal) {
 			console.log("no change");
 			return;
 		 } else{
@@ -889,13 +947,13 @@ function checkCVResDateChange(){
 					break;
 				default:
 					document.getElementById("text4421").value = "";
-			}	
+			}
 		}
 	}else{
 		console.log("empty");
 		document.getElementById("text4421").value = "";
 		visitDate="";
-	} 
+	}
 	},100);
 }
 
@@ -920,14 +978,14 @@ function setArrivalTime(){
 		case "Group Visit - PM":
 			document.getElementById("text3381").value = "1:30 p.m.";
 			break;
-		case "": // If they return to "select one", which is really blank. 
+		case "": //If they return to "select one", which is really blank.
 			document.getElementById("text3381").value = "";
 			break;
 		default:
 			//do nothing
 			break;
 	}
-	
+
 }
 
 //--------------
@@ -941,17 +999,26 @@ function createEEListeners(){
 	if(checkViewFields(["text219","date6485Date","text3985","text223","date6487Date","text3987"])){
 		//set listener for name 1
 		document.getElementById("text219").addEventListener("input", function(){setEEDate("text219","date6485Date","text3985");});
-		document.getElementById("text3985").setAttribute("readonly","");
+		document.getElementById("text3985").readOnly = true;
+
 		//set listener for name 2
 		document.getElementById("text223").addEventListener("input", function(){setEEDate("text223","date6487Date","text3987");});
-		document.getElementById("text3987").setAttribute("readonly","");
+		document.getElementById("text3987").readOnly = true;
+
+		//Looking at how to catch if the event listeners dodn't run properly. 
+		if(document.getElementById("text3987").readOnly !== true && document.getElementById("text3985").readOnly !== true){
+		console.log("Retrying E&E...");
+		createEEListeners();
+		}
+
 	} else{
 		recheckViewFields();
 	}
 }
 
-//if updated, check to see if date is empty, and if not, insert todays date when the name field is updated. 
+//if updated, check to see if date is empty, and if not, insert todays date when the name field is updated.
 function setEEDate(EEName,EEDate,EEShadowName){
+
 	if(document.getElementById(EEName).value!==""){
 		if(document.getElementById(EEDate).value === ""){
 			setDateField(EEDate);
@@ -975,23 +1042,23 @@ function createHSTranscriptAndPercentListeners(){
 		document.getElementById("text1415").addEventListener("change",setClassRankPercentile);
 		//GED% Field
 		document.getElementById("text3265").addEventListener("input",setGEDField);
-				
+
 	} else{
 		recheckViewFields();
 	}
 }
 
 function adjustAcademicInitiativeDropdown(){
-	//Get the visit type dropdown. 
+	//Get the visit type dropdown.
 	var dropdown=document.getElementById('text3703');
 	var dropdownOption;
-	
-	for (var i=0;i<dropdown.length;  i++) {
+
+	for (var i=0;i<dropdown.length;	 i++) {
 		//Get the value of i for visit type;
 		dropdownOption = dropdown.options[i].value;
-		//Make sure what we are removing isn't the current one selected. 
+		//Make sure what we are removing isn't the current one selected.
 		if (dropdownOption !== dropdown.value){
-			//If it isn't, then we can remove it. 
+			//If it isn't, then we can remove it.
 			switch (dropdownOption){
 				case "Never":
 					dropdown.remove(i);
@@ -1018,55 +1085,55 @@ function adjustAcademicInitiativeDropdown(){
 					break;
 			}
 		}
-		  
+
 	}
 
 
-	
+
 }
 
-//How do I handle ones where the name is already there? 
-//Looks for changes to HS Name and copies to HS transcript. 
+//How do I handle ones where the name is already there?
+//Looks for changes to HS Name and copies to HS transcript.
 function checkHSTranscriptNameChange(){
 	highSchoolName = document.getElementById("hsname").value;
-	console.log("HS transcript " + highSchoolName);		
+	console.log("HS transcript " + highSchoolName);
 	if(highSchoolName !=="" && document.getElementById("hscode").value !== "" && document.getElementById("text1501").value ===""){
 		document.getElementById("text1501").value = highSchoolName;
 	}
 	//set loop looking for the field to exist and be editable.
-	//resused fieldInterval as it has been cleared when we are able to edit. 
+	//resused fieldInterval as it has been cleared when we are able to edit.
 	fieldInterval = setInterval(function () {
-	if(document.getElementById("hsname").value !==""){	
+	if(document.getElementById("hsname").value !==""){
 		var newVal = document.getElementById("hsname").value;
 		//compare original hs name value to current value
-		if (highSchoolName === newVal) {  
+		if (highSchoolName === newVal) {
 		 } else{
-			//set the name to compare to. 
+			//set the name to compare to.
 			highSchoolName = document.getElementById("hsname").value;
-			//copy the high school name. 
+			//copy the high school name.
 			document.getElementById("text1501").value = highSchoolName;
-		}	
-	} 
+		}
+	}
 	},100);
 }
 
 
-//sets and checks the class rank percentile. 
+//sets and checks the class rank percentile.
 function setClassRankPercentile(){
 
 	var classRank = document.getElementById("numeric273").value;
 	var classSize = document.getElementById("numeric277").value;
 	var percentileRequired = document.getElementById("text1415").value;
-	
+
 	if(percentileRequired !== "N"){
 		if(classRank !=="" && classSize !==""){
 			document.getElementById("numeric7963").value = Math.round(100*(1-(classRank/classSize)));
 			 if( Math.round(100*(1-(classRank/classSize))) < 0){
 				document.getElementById("numeric7963").style.backgroundColor = "#ff717a";
 			 }else{
-				document.getElementById("numeric7963").style.backgroundColor = ""; 
+				document.getElementById("numeric7963").style.backgroundColor = "";
 			 }
-			setDateField("date7349Date");	
+			setDateField("date7349Date");
 		}
 	} else if(percentileRequired === "N"){
 		document.getElementById("numeric7963").value = "";
@@ -1089,14 +1156,14 @@ function setGEDField(){
 		document.getElementById("text1415").value = "N";
 		//Set percentile Recorded Date
 		setDateField("date7349Date");
-		
+
 	}
-	
+
 }
 
 //-----------//Dec of Intent / Ent Fee / Non-Enrolling View//-----------//
 function createFeeDateListener(){
-	
+
 	if(checkViewFields(["date2951Date","numeric2821"])){
 		console.log("dec starting");
 		feeDate = document.getElementById("date2951Date").value;
@@ -1110,26 +1177,26 @@ function createFeeDateListener(){
 }
 
 //Set fee amount, or clear the amount if the date is removed.
-//Not working when starting at view, then click edit on contact, then click calendar icon. How to fix this? 
+//Not working when starting at view, then click edit on contact, then click calendar icon. How to fix this?
 function checkFeeDateChange(){
-	
+
 	setTimeout( function(){
-	if(document.getElementById("date2951Date").value !==""){	
+	if(document.getElementById("date2951Date").value !==""){
 		var newVal = document.getElementById("date2951Date").value;
 		//set loop looking for the field to exist and be editable.
-		if (feeDate === newVal) {  
+		if (feeDate === newVal) {
 			console.log("No change");
 		 } else{
 			feeDate = newVal;
 			console.log("Fee date needed");
 			//set fee amount field
 			document.getElementById("numeric2821").value = "50";
-		}	
+		}
 	}else{
 		//clear fee amount field
-		document.getElementById("numeric2821").value = "";	
+		document.getElementById("numeric2821").value = "";
 		feeDate = "";
-	} 
+	}
 	},100);
 }
 
@@ -1153,13 +1220,13 @@ function setIntlAppProcDate(){
 //--------------
 
 //-----------//Interview Score Form View//-----------//
-//REMOVED AS WE NO LONGER USE INTERVIEWS. MAYBE ADJUST TO EREVIEW? 
+//REMOVED AS WE NO LONGER USE INTERVIEWS. MAYBE ADJUST TO EREVIEW?
 //Sets listener for Interview Score total
 /* function createInterviewListeners(){
 	if(checkViewFields(["numeric4261","numeric4221","numeric4223","numeric4225","numeric4227","numeric4229","numeric4231","numeric4233","numeric4235","numeric4237","numeric4239","numeric4241","numeric4243","numeric4245"])=== true){
 		//Set "Int-Total" field listener
 		document.getElementById("numeric4261").addEventListener("input",checkInterviewScore);
-		//Set listeners for 1-13 as they may need to update the value if it doesn't match. 
+		//Set listeners for 1-13 as they may need to update the value if it doesn't match.
 		document.getElementById("numeric4221").addEventListener("input",checkInterviewScore);
 		document.getElementById("numeric4223").addEventListener("input",checkInterviewScore);
 		document.getElementById("numeric4225").addEventListener("input",checkInterviewScore);
@@ -1180,8 +1247,8 @@ function setIntlAppProcDate(){
 
 //Changes the background color of the Interview Total field if q1-q13 do or don't match
 function checkInterviewScore(){
-	//Pull all of our numbers in. The + in front is a "unary" operator and tries to conver the value to a number. 
-	var q1 = +document.getElementById("numeric4221").value;  
+	//Pull all of our numbers in. The + in front is a "unary" operator and tries to conver the value to a number.
+	var q1 = +document.getElementById("numeric4221").value;
 	var q2 = +document.getElementById("numeric4223").value;
 	var q3 = +document.getElementById("numeric4225").value;
 	var q4 = +document.getElementById("numeric4227").value;
@@ -1198,7 +1265,7 @@ function checkInterviewScore(){
 	var mytotal = q1+q2+q3+q4+q5+q6+q7+q8+q9+q10+q11+q12+q13;
 	//check and make sure my interview total is not blank
 	if(document.getElementById("numeric4261").value !==""){
-		//If question totals don't match, show red, otherwise, show green. 
+		//If question totals don't match, show red, otherwise, show green.
 		if(mytotal !== intTotal){
 			document.getElementById("numeric4261").style.backgroundColor= "#ff717a";
 		} else{

@@ -76,3 +76,8 @@ V0.9.7.3
 V0.9.7.4
 - Tweaked the campus visit itinerary times. 
 
+V0.9.7.5
+- Tweaked campus visit itinerary times. 
+- created script to highlight if certain fields are "NO" on the campus visit reservation screen. 
+
+
