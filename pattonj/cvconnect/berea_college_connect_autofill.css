@@ -34,6 +34,12 @@
 	background-color: #f1f1f1;
 }
 
+/*.bigbutton is defined by Connect*/
+
+.smallbutton{
+font-size: x-small!important;
+}
+
 .show {
 	display:block; 
 } 

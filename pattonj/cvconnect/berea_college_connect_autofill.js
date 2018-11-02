@@ -13,7 +13,6 @@ var viewDropDownValue;	//What's the view?
 var visitDate;			//What date mm/dd/yyyy am I visiting? (CV Registration View)
 var feeDate;			//What date mm/dd/yyyy was the deposit paid? (Dec of Intent View)
 var fieldInterval;		//Loop for watching field
-var highSchoolName;		//What is the current High School Name? (HS Transcript/Counselor Evaluation Form View)
 var currentTime;		//Used to set date fields.
 var attempts = 0;		//Used to check how many attempts to load a view. Assumes that not all views are broken.
 
@@ -23,17 +22,14 @@ function setListener() {
 	currentLocation = window.location.pathname;
 	if(currentLocation === "/admin/Contacts/Search" || currentLocation === "/admin/Contacts/View" || currentLocation === "/admin/Contacts/Edit"){
 
+		//Run viewUpdate first. 
+		viewUpdate();
+		
 		//Replaced "contactViews", "editMode" and "newMode" event listeners with mutationObserver
 		//The "Loading" screen generally runs, but if you click "edit" or "view" from the search screen, it doesn't.
-		//Since the mutation observer wouldn't do any good, we need to run viewUpdate.
+		//Since the mutation observer wouldn't do any good, we need to ran viewUpdate above.
 		 loadingScreenMutationObserver();
-
-		//Now run view change update for the first time since they may go straight to edit mode.
-		viewUpdate();
 	}
-
-
-
 }
 
 function loadingScreenMutationObserver(){
@@ -104,9 +100,6 @@ function viewUpdate(reloaded){
 		case "Dec of Intent / Ent Fee / Non-Enrolling Form":
 			fieldWatch ("date2951Date",createFeeDateListener);
 			break;
-		//case "Interview Score Summary-Form":
-			//fieldWatch ("numeric4261",createInterviewListeners);
-			//break;
 		case "International Apps Processing":
 			fieldWatch ("text2961",createInternationalAppListener);
 			break;
@@ -153,14 +146,19 @@ function fieldWatch(myField,myFunction){
 //-----------//Multi-use functions//-----------//
 
 //Clear if they select OK from the confirm box on click.
-function clearDateChange(myDateField){
-	if(myDateField.value === ""){
+function clearDateField(myDateField,warning){
+	if(warning === false){
+		document.getElementById(myDateField).value = "";
+	}
+	
+	else{if(myDateField.value === ""){
 		alert("Please use date picker to set the date.");
-	}else{
-		if (confirm("Would you like to clear the date?\n \n (Please use date picker to set the date.)")){
-			myDateField.value = "";
 		}else{
-			return;
+			if (confirm("Would you like to clear the date?\n \n (Please use date picker to set the date.)")){
+				document.getElementById(myDateField).value = "";
+			}else{
+				return;
+			}
 		}
 	}
 
@@ -170,7 +168,7 @@ function clearDateChange(myDateField){
 function setDateField(myDateField){
 	currentTime = new Date();
 	document.getElementById(myDateField).value = (currentTime.getMonth() + 1) +"/"+currentTime.getDate()+"/"+currentTime.getFullYear();
-
+	
 }
 
 //Checking to see if the fields that are modified exist.
@@ -184,7 +182,7 @@ function checkViewFields(viewFields){
 				return false;
 			}
 		}
-		console.log("checkViewFields complete"); 
+		console.log("checkViewFields complete");
 		attempts = 0;
 		return true;
 }
@@ -273,6 +271,8 @@ function createCVItineraryButton() {
 
 	/*Dropdown menu from here https://www.w3schools.com/howto/howto_js_dropdown.asp*/
 	//Create our HTML to inject.
+	//Just as a side note incase I ever need to insert a script code
+	//https://www.danielcrabtree.com/blog/25/gotchas-with-dynamically-adding-script-tags-to-html
 	var bereaButton = document.createElement("div");
 	bereaButton.style = "float:right";
 	bereaButton.id = "bereaButton";
@@ -281,6 +281,7 @@ function createCVItineraryButton() {
 	  "<div id='BereaMenu' class='BereaDropdown-content'>"+
 		"<a href='#' ID='MWF_No_Class' onclick='return false;'>MWF - NO Class</a>"+
 		"<a href='#' ID='MWF_Yes_Class' onclick='return false;'>MWF - YES Class</a>"+
+		"<a href='#' ID='MWF_PM' onclick='return false;'>MWF - PM Class</a>"+
 		"<a href='#' ID='TR_AM' onclick='return false;'>TR - AM</a>"+
 		"<a href='#' ID='T_PM' onclick='return false;'>T - PM</a>"+
 		"<hr>"+
@@ -305,7 +306,9 @@ function createCVItineraryButton() {
 	document.getElementById("T_PM").addEventListener("click",function(){creatCVItinerary(4);});
 	document.getElementById("Group_AM").addEventListener("click",function(){creatCVItinerary(5);});
 	document.getElementById("Group_PM").addEventListener("click",function(){creatCVItinerary(6);});
-
+	//7 is legacy preview below. 
+	document.getElementById("MWF_PM").addEventListener("click",function(){creatCVItinerary(8);});
+	
 	//Before creating the event button, check for event date.
 	var EventDate = new Date('2018-10-06');
 	var CurrentDate = new Date();
@@ -323,8 +326,7 @@ function createCVItineraryButton() {
 
 
 
-	/*Just as a side note incase I ever need to insert a script code
-	https://www.danielcrabtree.com/blog/25/gotchas-with-dynamically-adding-script-tags-to-html*/
+
 	} else{
 		recheckViewFields();
 	}
@@ -376,406 +378,469 @@ function creatCVItinerary(x){
 
 		//Clear Sent Itinerary.
 		document.getElementById('text697_0').checked = true;
-
-	if(x === 1){
+	switch(x){
 		//With Class sit-in
+		case 1:
 
-		//Visit Type
-		document.getElementById('text598').value ="MWF - NO class";
-		//Arrival Time
-		document.getElementById('text3381').value ="11:30 a.m.";
-		//activity 1 (Activity, time, location, detail)
-		document.getElementById('text3321').value ="Arrive on Campus";
-		document.getElementById('text3341').value ="11:30 a.m.";
-		document.getElementById('text4581').value ="Haaga House";
-		document.getElementById('text4541').value ="- Lobby";
-		//activity 2
-		document.getElementById('text4681').value ="Admissions Video";
-		document.getElementById('text4627').value ="11:45 a.m.";
-		document.getElementById('text4589').value ="Haaga House";
-		document.getElementById('text4543').value ="- Presentation Room";
-		//activity 3
-		document.getElementById('text4683').value ="Information Session";
-		document.getElementById('text4629').value ="12:00 p.m.";
-		document.getElementById('text4591').value ="Haaga House";
-		document.getElementById('text4545').value ="- Presentation Room";
-		//activity 4
-		document.getElementById('text4685').value ="Lunch";
-		document.getElementById('text4631').value ="12:30 p.m.";
-		document.getElementById('text4593').value ="Dining Services";
-		document.getElementById('text4547').value ="- Mountaineer Dining Hall";
-		//activity 5
-		document.getElementById('text4687').value ="Tour and Swag Session";
-		document.getElementById('text4633').value ="1:45 p.m.";
-		document.getElementById('text4595').value ="";
-		document.getElementById('text4549').value ="With Student Ambassador";
-		//activity 6
-		document.getElementById('text4689').value ="Specialized Visit";
-		document.getElementById('text4635').value ="3:40 p.m.";
-		document.getElementById('text4597').value ="";
-		document.getElementById('text4551').value ="";
-		//activity 7
-		document.getElementById('text4691').value ="Parent Mixer";
-		document.getElementById('text4637').value ="3:40 p.m.";
-		document.getElementById('text4599').value ="Haaga House";
-		document.getElementById('text4553').value ="";
-		//activity 8
-		document.getElementById('text4693').value ="Optional Counselor Meeting";
-		document.getElementById('text4639').value ="4:30 p.m.";
-		document.getElementById('text4601').value ="Haaga House";
-		document.getElementById('text4555').value ="";
-		//Activity 9
-		document.getElementById('text4695').value ="Depart from Campus";
-		document.getElementById('text4641').value ="5:00 p.m.";
-		document.getElementById('text4603').value ="";
-		document.getElementById('text4557').value ="";
+			//Visit Type
+			document.getElementById('text598').value ="MWF - NO class";
+			//Arrival Time
+			document.getElementById('text3381').value ="11:30 a.m.";
+			//activity 1 (Activity, time, location, detail)
+			document.getElementById('text3321').value ="Arrive on Campus";
+			document.getElementById('text3341').value ="11:30 a.m.";
+			document.getElementById('text4581').value ="Haaga House";
+			document.getElementById('text4541').value ="- Lobby";
+			//activity 2
+			document.getElementById('text4681').value ="Admissions Video";
+			document.getElementById('text4627').value ="11:45 a.m.";
+			document.getElementById('text4589').value ="Haaga House";
+			document.getElementById('text4543').value ="- Presentation Room";
+			//activity 3
+			document.getElementById('text4683').value ="Information Session";
+			document.getElementById('text4629').value ="12:00 p.m.";
+			document.getElementById('text4591').value ="Haaga House";
+			document.getElementById('text4545').value ="- Presentation Room";
+			//activity 4
+			document.getElementById('text4685').value ="Lunch";
+			document.getElementById('text4631').value ="12:30 p.m.";
+			document.getElementById('text4593').value ="Dining Services";
+			document.getElementById('text4547').value ="- Mountaineer Dining Hall";
+			//activity 5
+			document.getElementById('text4687').value ="Tour and Swag Session";
+			document.getElementById('text4633').value ="1:45 p.m.";
+			document.getElementById('text4595').value ="";
+			document.getElementById('text4549').value ="With Student Ambassador";
+			//activity 6
+			document.getElementById('text4689').value ="Specialized Visit";
+			document.getElementById('text4635').value ="3:40 p.m.";
+			document.getElementById('text4597').value ="";
+			document.getElementById('text4551').value ="";
+			//activity 7
+			document.getElementById('text4691').value ="Parent Mixer";
+			document.getElementById('text4637').value ="3:40 p.m.";
+			document.getElementById('text4599').value ="Haaga House";
+			document.getElementById('text4553').value ="";
+			//activity 8
+			document.getElementById('text4693').value ="Optional Counselor Meeting";
+			document.getElementById('text4639').value ="4:30 p.m.";
+			document.getElementById('text4601').value ="Haaga House";
+			document.getElementById('text4555').value ="";
+			//Activity 9
+			document.getElementById('text4695').value ="Depart from Campus";
+			document.getElementById('text4641').value ="5:00 p.m.";
+			document.getElementById('text4603').value ="";
+			document.getElementById('text4557').value ="";
 
-	return false;
-	} else if(x === 2){
-		//With Class sit-in
+		break;
+		
+		//Without  Class sit-in	
+		case 2:
 
-		//Visit Type
-		document.getElementById('text598').value ="MWF - YES class";
-		//Arrival Time
-		document.getElementById('text3381').value ="10:00 a.m.";
-		//activity 1 (Activity, time, location, detail)
-		document.getElementById('text3321').value ="Arrive on Campus";
-		document.getElementById('text3341').value ="10:00 a.m.";
-		document.getElementById('text4581').value ="Haaga House";
-		document.getElementById('text4541').value ="- Lobby";
-		//activity 2
-		document.getElementById('text4681').value ="Admissions Video";
-		document.getElementById('text4627').value ="10:10 a.m.";
-		document.getElementById('text4589').value ="Haaga House";
-		document.getElementById('text4543').value ="- Presentation Room";
-		//activity 3
-		document.getElementById('text4683').value ="Attend a Class";
-		document.getElementById('text4629').value ="10:40 a.m.";
-		document.getElementById('text4591').value ="";
-		document.getElementById('text4545').value ="";
-		//activity 4
-		document.getElementById('text4685').value ="Information Session";
-		document.getElementById('text4631').value ="12:00 p.m.";
-		document.getElementById('text4593').value ="Haaga House";
-		document.getElementById('text4547').value ="- Presentation Room";
-		//activity 5
-		document.getElementById('text4687').value ="Lunch";
-		document.getElementById('text4633').value ="12:30 p.m.";
-		document.getElementById('text4595').value ="Dining Services";
-		document.getElementById('text4549').value ="- Mountaineer Dining Hall";
-		//activity 6
-		document.getElementById('text4689').value ="Tour and Swag Session";
-		document.getElementById('text4635').value ="1:45 p.m.";
-		document.getElementById('text4597').value ="";
-		document.getElementById('text4551').value ="With Student Ambassador";
-		//activity 7
-		document.getElementById('text4691').value ="Specialized Visit";
-		document.getElementById('text4637').value ="3:40 p.m.";
-		document.getElementById('text4599').value ="";
-		document.getElementById('text4553').value ="";
-		//activity 8
-		document.getElementById('text4693').value ="Parent Mixer";
-		document.getElementById('text4639').value ="3:40 p.m.";
-		document.getElementById('text4601').value ="Haaga House";
-		document.getElementById('text4555').value ="";
-		//Activity 9
-		document.getElementById('text4695').value ="Optional Counselor Meeting";
-		document.getElementById('text4641').value ="4:30 p.m.";
-		document.getElementById('text4603').value ="Haaga House";
-		document.getElementById('text4557').value ="";
-		//activity 10
-		document.getElementById('text4697').value ="Depart from Campus";
-		document.getElementById('text4643').value ="5:00 p.m.";
-		document.getElementById('text4605').value ="";
-		document.getElementById('text4559').value ="";
+			//Visit Type
+			document.getElementById('text598').value ="MWF - YES class";
+			//Arrival Time
+			document.getElementById('text3381').value ="10:00 a.m.";
+			//activity 1 (Activity, time, location, detail)
+			document.getElementById('text3321').value ="Arrive on Campus";
+			document.getElementById('text3341').value ="10:00 a.m.";
+			document.getElementById('text4581').value ="Haaga House";
+			document.getElementById('text4541').value ="- Lobby";
+			//activity 2
+			document.getElementById('text4681').value ="Admissions Video";
+			document.getElementById('text4627').value ="10:10 a.m.";
+			document.getElementById('text4589').value ="Haaga House";
+			document.getElementById('text4543').value ="- Presentation Room";
+			//activity 3
+			document.getElementById('text4683').value ="Attend a Class";
+			document.getElementById('text4629').value ="10:40 a.m.";
+			document.getElementById('text4591').value ="";
+			document.getElementById('text4545').value ="";
+			//activity 4
+			document.getElementById('text4685').value ="Information Session";
+			document.getElementById('text4631').value ="12:00 p.m.";
+			document.getElementById('text4593').value ="Haaga House";
+			document.getElementById('text4547').value ="- Presentation Room";
+			//activity 5
+			document.getElementById('text4687').value ="Lunch";
+			document.getElementById('text4633').value ="12:30 p.m.";
+			document.getElementById('text4595').value ="Dining Services";
+			document.getElementById('text4549').value ="- Mountaineer Dining Hall";
+			//activity 6
+			document.getElementById('text4689').value ="Tour and Swag Session";
+			document.getElementById('text4635').value ="1:45 p.m.";
+			document.getElementById('text4597').value ="";
+			document.getElementById('text4551').value ="With Student Ambassador";
+			//activity 7
+			document.getElementById('text4691').value ="Specialized Visit";
+			document.getElementById('text4637').value ="3:40 p.m.";
+			document.getElementById('text4599').value ="";
+			document.getElementById('text4553').value ="";
+			//activity 8
+			document.getElementById('text4693').value ="Parent Mixer";
+			document.getElementById('text4639').value ="3:40 p.m.";
+			document.getElementById('text4601').value ="Haaga House";
+			document.getElementById('text4555').value ="";
+			//Activity 9
+			document.getElementById('text4695').value ="Optional Counselor Meeting";
+			document.getElementById('text4641').value ="4:30 p.m.";
+			document.getElementById('text4603').value ="Haaga House";
+			document.getElementById('text4557').value ="";
+			//activity 10
+			document.getElementById('text4697').value ="Depart from Campus";
+			document.getElementById('text4643').value ="5:00 p.m.";
+			document.getElementById('text4605').value ="";
+			document.getElementById('text4559').value ="";
 
-	return false;
-	} else if( x === 3) {
-		//Visit Type
-		document.getElementById('text598').value ="TR - AM";
-		//Arrival Time
-		document.getElementById('text3381').value ="8:45 a.m.";
-		//activity 1 (Activity, time, location, detail)
-		document.getElementById('text3321').value ="Arrive on Campus";
-		document.getElementById('text3341').value ="8:45 a.m.";
-		document.getElementById('text4581').value ="Haaga House";
-		document.getElementById('text4541').value ="- Lobby";
-		//activity 2
-		document.getElementById('text4681').value ="Admissions Video";
-		document.getElementById('text4627').value ="9:00 a.m.";
-		document.getElementById('text4589').value ="Haaga House";
-		document.getElementById('text4543').value ="- Presentation Room";
-		//activity 3
-		document.getElementById('text4683').value ="Information Session";
-		document.getElementById('text4629').value ="9:10 a.m.";
-		document.getElementById('text4591').value ="Haaga House";
-		document.getElementById('text4545').value ="- Presentation Room";
-		//activity 4
-		document.getElementById('text4685').value ="Tour of Campus";
-		document.getElementById('text4631').value ="9:40 a.m.";
-		document.getElementById('text4593').value ="";
-		document.getElementById('text4547').value ="With Student Ambassador";
-		//activity 5
-		document.getElementById('text4687').value ="Depart from Campus";
-		document.getElementById('text4633').value ="10:40 a.m.";
-		document.getElementById('text4595').value ="";
-		document.getElementById('text4549').value ="";
-		//activity 6
-		document.getElementById('text4689').value ="";
-		document.getElementById('text4635').value ="";
-		document.getElementById('text4597').value ="";
-		document.getElementById('text4551').value ="";
-		//activity 7
-		document.getElementById('text4691').value ="";
-		document.getElementById('text4637').value ="";
-		document.getElementById('text4599').value ="";
-		document.getElementById('text4553').value ="";
-		//clear activity 8
-		document.getElementById('text4693').value ="";
-		document.getElementById('text4639').value ="";
-		document.getElementById('text4601').value ="";
-		document.getElementById('text4555').value ="";
-		//activity 9
-		document.getElementById('text4695').value ="";
-		document.getElementById('text4641').value ="";
-		document.getElementById('text4603').value ="";
-		document.getElementById('text4557').value ="";
-		//activity 10
-		document.getElementById('text4697').value ="";
-		document.getElementById('text4643').value ="";
-		document.getElementById('text4605').value ="";
-		document.getElementById('text4559').value ="";
-		return false;
-	} else if( x === 4) {
-
-		//Visit Type
-		document.getElementById('text598').value ="T - PM";
-		//Arrival Time
-		document.getElementById('text3381').value ="1:00 p.m.";
-		//activity 1 (Activity, time, location, detail)
-		document.getElementById('text3321').value ="Arrive on Campus";
-		document.getElementById('text3341').value ="1:00 p.m.";
-		document.getElementById('text4581').value ="Haaga House";
-		document.getElementById('text4541').value ="- Lobby";
-		//activity 2
-		document.getElementById('text4681').value ="Admissions Video";
-		document.getElementById('text4627').value ="1:15 p.m.";
-		document.getElementById('text4589').value ="Haaga House";
-		document.getElementById('text4543').value ="- Presentation Room";
-		//activity 3
-		document.getElementById('text4683').value ="Information Session";
-		document.getElementById('text4629').value ="1:25 p.m.";
-		document.getElementById('text4591').value ="Haaga House";
-		document.getElementById('text4545').value ="- Presentation Room";
-		//activity 4
-		document.getElementById('text4685').value ="Tour of Campus";
-		document.getElementById('text4631').value ="1:55 p.m.";
-		document.getElementById('text4593').value ="";
-		document.getElementById('text4547').value ="With Student Ambassador";
-		//activity 5
-		document.getElementById('text4687').value ="Depart from Campus";
-		document.getElementById('text4633').value ="2:55 p.m.";
-		document.getElementById('text4595').value ="";
-		document.getElementById('text4549').value ="";
-		//activity 6
-		document.getElementById('text4689').value ="";
-		document.getElementById('text4635').value ="";
-		document.getElementById('text4597').value ="";
-		document.getElementById('text4551').value ="";
-		//activity 7
-		document.getElementById('text4691').value ="";
-		document.getElementById('text4637').value ="";
-		document.getElementById('text4599').value ="";
-		document.getElementById('text4553').value ="";
-		//clear activity 8
-		document.getElementById('text4693').value ="";
-		document.getElementById('text4639').value ="";
-		document.getElementById('text4601').value ="";
-		document.getElementById('text4555').value ="";
-		//activity 9
-		document.getElementById('text4695').value ="";
-		document.getElementById('text4641').value ="";
-		document.getElementById('text4603').value ="";
-		document.getElementById('text4557').value ="";
-		//activity 10
-		document.getElementById('text4697').value ="";
-		document.getElementById('text4643').value ="";
-		document.getElementById('text4605').value ="";
-		document.getElementById('text4559').value ="";
-		return false;
-	} else if( x === 5) {
-
-		//Visit Type
-		document.getElementById('text598').value ="Group Visit - AM";
-		//Arrival Time
-		document.getElementById('text3381').value ="10:00 a.m.";
-		//activity 1 (Activity, time, location, detail)
-		document.getElementById('text3321').value ="Arrive on Campus";
-		document.getElementById('text3341').value ="10:00 a.m.";
-		document.getElementById('text4581').value ="Haaga House";
-		document.getElementById('text4541').value ="- Lobby";
-		//activity 2
-		document.getElementById('text4681').value ="Tour of Campus";
-		document.getElementById('text4627').value ="10:10 a.m.";
-		document.getElementById('text4589').value ="";
-		document.getElementById('text4543').value ="With Student Ambassador";
-		//activity 3
-		document.getElementById('text4683').value ="Registration";
-		document.getElementById('text4629').value ="11:10 a.m.";
-		document.getElementById('text4591').value ="Haaga House";
-		document.getElementById('text4545').value ="- Presentation Room";
-		//activity 4
-		document.getElementById('text4685').value ="Admissions Video";
-		document.getElementById('text4631').value ="11:15 a.m.";
-		document.getElementById('text4593').value ="Haaga House";
-		document.getElementById('text4547').value ="- Presentation Room";
-		//activity 5
-		document.getElementById('text4687').value ="Information Session";
-		document.getElementById('text4633').value ="11:25 a.m.";
-		document.getElementById('text4595').value ="Haaga House";
-		document.getElementById('text4549').value ="- Presentation Room";
-		//activity 6
-		document.getElementById('text4689').value ="Depart from Campus";
-		document.getElementById('text4635').value ="12:00 p.m.";
-		document.getElementById('text4597').value ="";
-		document.getElementById('text4551').value ="";
-		//activity 7
-		document.getElementById('text4691').value ="";
-		document.getElementById('text4637').value ="";
-		document.getElementById('text4599').value ="";
-		document.getElementById('text4553').value ="";
-		//clear activity 8
-		document.getElementById('text4693').value ="";
-		document.getElementById('text4639').value ="";
-		document.getElementById('text4601').value ="";
-		document.getElementById('text4555').value ="";
-		//activity 9
-		document.getElementById('text4695').value ="";
-		document.getElementById('text4641').value ="";
-		document.getElementById('text4603').value ="";
-		document.getElementById('text4557').value ="";
-		//activity 10
-		document.getElementById('text4697').value ="";
-		document.getElementById('text4643').value ="";
-		document.getElementById('text4605').value ="";
-		document.getElementById('text4559').value ="";
-		return false;
-} else if( x === 6) {
-
-		//Visit Type
-		document.getElementById('text598').value ="Group Visit - PM";
-		//Arrival Time
-		document.getElementById('text3381').value ="1:30 p.m.";
-		//activity 1 (Activity, time, location, detail)
-		document.getElementById('text3321').value ="Arrive on Campus";
-		document.getElementById('text3341').value ="1:30 p.m.";
-		document.getElementById('text4581').value ="Haaga House";
-		document.getElementById('text4541').value ="- Lobby";
-		//activity 2
-		document.getElementById('text4681').value ="Tour of Campus";
-		document.getElementById('text4627').value ="1:40 p.m.";
-		document.getElementById('text4589').value ="";
-		document.getElementById('text4543').value ="With Student Ambassador";
-		//activity 3
-		document.getElementById('text4683').value ="Registration";
-		document.getElementById('text4629').value ="2:40 p.m.";
-		document.getElementById('text4591').value ="Haaga House";
-		document.getElementById('text4545').value ="- Presentation Room";
-		//activity 4
-		document.getElementById('text4685').value ="Admissions Video";
-		document.getElementById('text4631').value ="2:50 p.m.";
-		document.getElementById('text4593').value ="Haaga House";
-		document.getElementById('text4547').value ="- Presentation Room";
-		//activity 5
-		document.getElementById('text4687').value ="Information Session";
-		document.getElementById('text4633').value ="3:00 p.m.";
-		document.getElementById('text4595').value ="Haaga House";
-		document.getElementById('text4549').value ="- Presentation Room";
-		//activity 6
-		document.getElementById('text4689').value ="Depart from Campus";
-		document.getElementById('text4635').value ="3:30 p.m.";
-		document.getElementById('text4597').value ="";
-		document.getElementById('text4551').value ="";
-		//activity 7
-		document.getElementById('text4691').value ="";
-		document.getElementById('text4637').value ="";
-		document.getElementById('text4599').value ="";
-		document.getElementById('text4553').value ="";
-		//clear activity 8
-		document.getElementById('text4693').value ="";
-		document.getElementById('text4639').value ="";
-		document.getElementById('text4601').value ="";
-		document.getElementById('text4555').value ="";
-		//activity 9
-		document.getElementById('text4695').value ="";
-		document.getElementById('text4641').value ="";
-		document.getElementById('text4603').value ="";
-		document.getElementById('text4557').value ="";
-		//activity 10
-		document.getElementById('text4697').value ="";
-		document.getElementById('text4643').value ="";
-		document.getElementById('text4605').value ="";
-		document.getElementById('text4559').value ="";
-		return false;
-
-	//For Events
-	} else if( x === 7) {
-
-		//Visit Type
-		document.getElementById('text598').value ="Legacy Preview";
-		//Arrival Time
-		document.getElementById('text3381').value ="9:15 a.m.";
-		//activity 1 (Activity, time, location, detail)
-		document.getElementById('text3321').value ="Registration";
-		document.getElementById('text3341').value ="9:15 a.m.";
-		document.getElementById('text4581').value ="Haaga House";
-		document.getElementById('text4541').value ="- Lobby";
-		//activity 2
-		document.getElementById('text4681').value ="Welcome";
-		document.getElementById('text4627').value ="10:00 a.m.";
-		document.getElementById('text4589').value ="Cargill Natural Sciences and Health Building";
-		document.getElementById('text4543').value ="- Digital Theatre";
-		//activity 3
-		document.getElementById('text4683').value ="Attend a Class";
-		document.getElementById('text4629').value ="10:40 a.m.";
-		document.getElementById('text4591').value ="";
-		document.getElementById('text4545').value ="";
-		//activity 4
-		document.getElementById('text4685').value ="Information Session";
-		document.getElementById('text4631').value ="12:00 p.m.";
-		document.getElementById('text4593').value ="Woods-Penniman";
-		document.getElementById('text4547').value ="- Commons";
-		//activity 5
-		document.getElementById('text4687').value ="Lunch";
-		document.getElementById('text4633').value ="12:30 p.m.";
-		document.getElementById('text4595').value ="Dining Services";
-		document.getElementById('text4549').value ="";
-		//activity 6
-		document.getElementById('text4689').value ="Tour and Swag Session";
-		document.getElementById('text4635').value ="1:45 p.m.";
-		document.getElementById('text4597').value ="";
-		document.getElementById('text4551').value ="With Student Ambassador";
-		//activity 7
-		document.getElementById('text4691').value ="Specialized Visit";
-		document.getElementById('text4637').value ="3:40 p.m.";
-		document.getElementById('text4599').value ="";
-		document.getElementById('text4553').value ="";
-		//activity 8
-		document.getElementById('text4693').value ="Meet with Counselor";
-		document.getElementById('text4639').value ="4:30 p.m.";
-		document.getElementById('text4601').value ="Haaga House";
-		document.getElementById('text4555').value ="";
-		//activity 9
-		document.getElementById('text4695').value ="Dinner";
-		document.getElementById('text4641').value ="5:30 p.m.";
-		document.getElementById('text4603').value ="Haaga House";
-		document.getElementById('text4557').value ="";
-		//activity 10
-		document.getElementById('text4697').value ="Depart from Campus";
-		document.getElementById('text4643').value ="8:00 p.m.";
-		document.getElementById('text4605').value ="";
-		document.getElementById('text4559').value ="";
-		return false;
+		break;
+		
+		case 3:
+			//Visit Type
+			document.getElementById('text598').value ="TR - AM";
+			//Arrival Time
+			document.getElementById('text3381').value ="8:45 a.m.";
+			//activity 1 (Activity, time, location, detail)
+			document.getElementById('text3321').value ="Arrive on Campus";
+			document.getElementById('text3341').value ="8:45 a.m.";
+			document.getElementById('text4581').value ="Haaga House";
+			document.getElementById('text4541').value ="- Lobby";
+			//activity 2
+			document.getElementById('text4681').value ="Admissions Video";
+			document.getElementById('text4627').value ="9:00 a.m.";
+			document.getElementById('text4589').value ="Haaga House";
+			document.getElementById('text4543').value ="- Presentation Room";
+			//activity 3
+			document.getElementById('text4683').value ="Information Session";
+			document.getElementById('text4629').value ="9:10 a.m.";
+			document.getElementById('text4591').value ="Haaga House";
+			document.getElementById('text4545').value ="- Presentation Room";
+			//activity 4
+			document.getElementById('text4685').value ="Tour of Campus";
+			document.getElementById('text4631').value ="9:40 a.m.";
+			document.getElementById('text4593').value ="";
+			document.getElementById('text4547').value ="With Student Ambassador";
+			//activity 5
+			document.getElementById('text4687').value ="Depart from Campus";
+			document.getElementById('text4633').value ="10:40 a.m.";
+			document.getElementById('text4595').value ="";
+			document.getElementById('text4549').value ="";
+			//activity 6
+			document.getElementById('text4689').value ="";
+			document.getElementById('text4635').value ="";
+			document.getElementById('text4597').value ="";
+			document.getElementById('text4551').value ="";
+			//activity 7
+			document.getElementById('text4691').value ="";
+			document.getElementById('text4637').value ="";
+			document.getElementById('text4599').value ="";
+			document.getElementById('text4553').value ="";
+			//clear activity 8
+			document.getElementById('text4693').value ="";
+			document.getElementById('text4639').value ="";
+			document.getElementById('text4601').value ="";
+			document.getElementById('text4555').value ="";
+			//activity 9
+			document.getElementById('text4695').value ="";
+			document.getElementById('text4641').value ="";
+			document.getElementById('text4603').value ="";
+			document.getElementById('text4557').value ="";
+			//activity 10
+			document.getElementById('text4697').value ="";
+			document.getElementById('text4643').value ="";
+			document.getElementById('text4605').value ="";
+			document.getElementById('text4559').value ="";
+		break;
+	
+		case 4:
+			//Visit Type
+			document.getElementById('text598').value ="T - PM";
+			//Arrival Time
+			document.getElementById('text3381').value ="1:00 p.m.";
+			//activity 1 (Activity, time, location, detail)
+			document.getElementById('text3321').value ="Arrive on Campus";
+			document.getElementById('text3341').value ="1:00 p.m.";
+			document.getElementById('text4581').value ="Haaga House";
+			document.getElementById('text4541').value ="- Lobby";
+			//activity 2
+			document.getElementById('text4681').value ="Admissions Video";
+			document.getElementById('text4627').value ="1:15 p.m.";
+			document.getElementById('text4589').value ="Haaga House";
+			document.getElementById('text4543').value ="- Presentation Room";
+			//activity 3
+			document.getElementById('text4683').value ="Information Session";
+			document.getElementById('text4629').value ="1:25 p.m.";
+			document.getElementById('text4591').value ="Haaga House";
+			document.getElementById('text4545').value ="- Presentation Room";
+			//activity 4
+			document.getElementById('text4685').value ="Tour of Campus";
+			document.getElementById('text4631').value ="1:55 p.m.";
+			document.getElementById('text4593').value ="";
+			document.getElementById('text4547').value ="With Student Ambassador";
+			//activity 5
+			document.getElementById('text4687').value ="Depart from Campus";
+			document.getElementById('text4633').value ="2:55 p.m.";
+			document.getElementById('text4595').value ="";
+			document.getElementById('text4549').value ="";
+			//activity 6
+			document.getElementById('text4689').value ="";
+			document.getElementById('text4635').value ="";
+			document.getElementById('text4597').value ="";
+			document.getElementById('text4551').value ="";
+			//activity 7
+			document.getElementById('text4691').value ="";
+			document.getElementById('text4637').value ="";
+			document.getElementById('text4599').value ="";
+			document.getElementById('text4553').value ="";
+			//clear activity 8
+			document.getElementById('text4693').value ="";
+			document.getElementById('text4639').value ="";
+			document.getElementById('text4601').value ="";
+			document.getElementById('text4555').value ="";
+			//activity 9
+			document.getElementById('text4695').value ="";
+			document.getElementById('text4641').value ="";
+			document.getElementById('text4603').value ="";
+			document.getElementById('text4557').value ="";
+			//activity 10
+			document.getElementById('text4697').value ="";
+			document.getElementById('text4643').value ="";
+			document.getElementById('text4605').value ="";
+			document.getElementById('text4559').value ="";
+		break;
+		
+		case 6:
+			//Visit Type
+			document.getElementById('text598').value ="Group Visit - AM";
+			//Arrival Time
+			document.getElementById('text3381').value ="10:00 a.m.";
+			//activity 1 (Activity, time, location, detail)
+			document.getElementById('text3321').value ="Arrive on Campus";
+			document.getElementById('text3341').value ="10:00 a.m.";
+			document.getElementById('text4581').value ="Haaga House";
+			document.getElementById('text4541').value ="- Lobby";
+			//activity 2
+			document.getElementById('text4681').value ="Tour of Campus";
+			document.getElementById('text4627').value ="10:10 a.m.";
+			document.getElementById('text4589').value ="";
+			document.getElementById('text4543').value ="With Student Ambassador";
+			//activity 3
+			document.getElementById('text4683').value ="Registration";
+			document.getElementById('text4629').value ="11:10 a.m.";
+			document.getElementById('text4591').value ="Haaga House";
+			document.getElementById('text4545').value ="- Presentation Room";
+			//activity 4
+			document.getElementById('text4685').value ="Admissions Video";
+			document.getElementById('text4631').value ="11:15 a.m.";
+			document.getElementById('text4593').value ="Haaga House";
+			document.getElementById('text4547').value ="- Presentation Room";
+			//activity 5
+			document.getElementById('text4687').value ="Information Session";
+			document.getElementById('text4633').value ="11:25 a.m.";
+			document.getElementById('text4595').value ="Haaga House";
+			document.getElementById('text4549').value ="- Presentation Room";
+			//activity 6
+			document.getElementById('text4689').value ="Depart from Campus";
+			document.getElementById('text4635').value ="12:00 p.m.";
+			document.getElementById('text4597').value ="";
+			document.getElementById('text4551').value ="";
+			//activity 7
+			document.getElementById('text4691').value ="";
+			document.getElementById('text4637').value ="";
+			document.getElementById('text4599').value ="";
+			document.getElementById('text4553').value ="";
+			//clear activity 8
+			document.getElementById('text4693').value ="";
+			document.getElementById('text4639').value ="";
+			document.getElementById('text4601').value ="";
+			document.getElementById('text4555').value ="";
+			//activity 9
+			document.getElementById('text4695').value ="";
+			document.getElementById('text4641').value ="";
+			document.getElementById('text4603').value ="";
+			document.getElementById('text4557').value ="";
+			//activity 10
+			document.getElementById('text4697').value ="";
+			document.getElementById('text4643').value ="";
+			document.getElementById('text4605').value ="";
+			document.getElementById('text4559').value ="";
+		break;
+		
+		case 6:
+			//Visit Type
+			document.getElementById('text598').value ="Group Visit - PM";
+			//Arrival Time
+			document.getElementById('text3381').value ="1:30 p.m.";
+			//activity 1 (Activity, time, location, detail)
+			document.getElementById('text3321').value ="Arrive on Campus";
+			document.getElementById('text3341').value ="1:30 p.m.";
+			document.getElementById('text4581').value ="Haaga House";
+			document.getElementById('text4541').value ="- Lobby";
+			//activity 2
+			document.getElementById('text4681').value ="Tour of Campus";
+			document.getElementById('text4627').value ="1:40 p.m.";
+			document.getElementById('text4589').value ="";
+			document.getElementById('text4543').value ="With Student Ambassador";
+			//activity 3
+			document.getElementById('text4683').value ="Registration";
+			document.getElementById('text4629').value ="2:40 p.m.";
+			document.getElementById('text4591').value ="Haaga House";
+			document.getElementById('text4545').value ="- Presentation Room";
+			//activity 4
+			document.getElementById('text4685').value ="Admissions Video";
+			document.getElementById('text4631').value ="2:50 p.m.";
+			document.getElementById('text4593').value ="Haaga House";
+			document.getElementById('text4547').value ="- Presentation Room";
+			//activity 5
+			document.getElementById('text4687').value ="Information Session";
+			document.getElementById('text4633').value ="3:00 p.m.";
+			document.getElementById('text4595').value ="Haaga House";
+			document.getElementById('text4549').value ="- Presentation Room";
+			//activity 6
+			document.getElementById('text4689').value ="Depart from Campus";
+			document.getElementById('text4635').value ="3:30 p.m.";
+			document.getElementById('text4597').value ="";
+			document.getElementById('text4551').value ="";
+			//activity 7
+			document.getElementById('text4691').value ="";
+			document.getElementById('text4637').value ="";
+			document.getElementById('text4599').value ="";
+			document.getElementById('text4553').value ="";
+			//clear activity 8
+			document.getElementById('text4693').value ="";
+			document.getElementById('text4639').value ="";
+			document.getElementById('text4601').value ="";
+			document.getElementById('text4555').value ="";
+			//activity 9
+			document.getElementById('text4695').value ="";
+			document.getElementById('text4641').value ="";
+			document.getElementById('text4603').value ="";
+			document.getElementById('text4557').value ="";
+			//activity 10
+			document.getElementById('text4697').value ="";
+			document.getElementById('text4643').value ="";
+			document.getElementById('text4605').value ="";
+			document.getElementById('text4559').value ="";
+			break;
+		
+		//For Events		
+		case 7:
+			//Visit Type
+			document.getElementById('text598').value ="Legacy Preview";
+			//Arrival Time
+			document.getElementById('text3381').value ="9:15 a.m.";
+			//activity 1 (Activity, time, location, detail)
+			document.getElementById('text3321').value ="Registration";
+			document.getElementById('text3341').value ="9:15 a.m.";
+			document.getElementById('text4581').value ="Haaga House";
+			document.getElementById('text4541').value ="- Lobby";
+			//activity 2
+			document.getElementById('text4681').value ="Welcome";
+			document.getElementById('text4627').value ="10:00 a.m.";
+			document.getElementById('text4589').value ="Cargill Natural Sciences and Health Building";
+			document.getElementById('text4543').value ="- Digital Theatre";
+			//activity 3
+			document.getElementById('text4683').value ="Attend a Class";
+			document.getElementById('text4629').value ="10:40 a.m.";
+			document.getElementById('text4591').value ="";
+			document.getElementById('text4545').value ="";
+			//activity 4
+			document.getElementById('text4685').value ="Information Session";
+			document.getElementById('text4631').value ="12:00 p.m.";
+			document.getElementById('text4593').value ="Woods-Penniman";
+			document.getElementById('text4547').value ="- Commons";
+			//activity 5
+			document.getElementById('text4687').value ="Lunch";
+			document.getElementById('text4633').value ="12:30 p.m.";
+			document.getElementById('text4595').value ="Dining Services";
+			document.getElementById('text4549').value ="";
+			//activity 6
+			document.getElementById('text4689').value ="Tour and Swag Session";
+			document.getElementById('text4635').value ="1:45 p.m.";
+			document.getElementById('text4597').value ="";
+			document.getElementById('text4551').value ="With Student Ambassador";
+			//activity 7
+			document.getElementById('text4691').value ="Specialized Visit";
+			document.getElementById('text4637').value ="3:40 p.m.";
+			document.getElementById('text4599').value ="";
+			document.getElementById('text4553').value ="";
+			//activity 8
+			document.getElementById('text4693').value ="Meet with Counselor";
+			document.getElementById('text4639').value ="4:30 p.m.";
+			document.getElementById('text4601').value ="Haaga House";
+			document.getElementById('text4555').value ="";
+			//activity 9
+			document.getElementById('text4695').value ="Dinner";
+			document.getElementById('text4641').value ="5:30 p.m.";
+			document.getElementById('text4603').value ="Haaga House";
+			document.getElementById('text4557').value ="";
+			//activity 10
+			document.getElementById('text4697').value ="Depart from Campus";
+			document.getElementById('text4643').value ="8:00 p.m.";
+			document.getElementById('text4605').value ="";
+			document.getElementById('text4559').value ="";
+		break;
+		
+		case 8:
+			//visit type
+			document.getElementById('text598').value ="MWF - NO class";
+			//Arrival Time
+			document.getElementById('text3381').value ="1:15 p.m.";
+			//activity 1 (Activity, time, location, detail)
+			document.getElementById('text3321').value ="Arrive on Campus";
+			document.getElementById('text3341').value ="1:15 p.m.";
+			document.getElementById('text4581').value ="Haaga House";
+			document.getElementById('text4541').value ="- Lobby";
+			//activity 2
+			document.getElementById('text4681').value ="Admissions Video";
+			document.getElementById('text4627').value ="1:30 p.m.";
+			document.getElementById('text4589').value ="Haaga House";
+			document.getElementById('text4543').value ="- Presentation Room";
+			//activity 3
+			document.getElementById('text4683').value ="Tour of Campus";
+			document.getElementById('text4629').value ="1:45 p.m.";
+			document.getElementById('text4591').value ="";
+			document.getElementById('text4545').value ="With Student Ambassador";
+			//activity 4
+			document.getElementById('text4685').value ="Information Session";
+			document.getElementById('text4631').value ="3:15 p.m.";
+			document.getElementById('text4593').value ="Haaga House";
+			document.getElementById('text4547').value ="- Presentation Room";
+			//activity 5
+			document.getElementById('text4687').value ="Specialized Visit";
+			document.getElementById('text4633').value ="3:45 p.m.";
+			document.getElementById('text4595').value ="Haaga House";
+			document.getElementById('text4549').value ="";
+			//activity 6
+			document.getElementById('text4689').value ="Parent Mixer";
+			document.getElementById('text4635').value ="3:45 p.m.";
+			document.getElementById('text4597').value ="Haaga House";
+			document.getElementById('text4551').value ="";
+			//activity 7
+			document.getElementById('text4691').value ="Optional Counselor Meeting";
+			document.getElementById('text4637').value ="4:30 p.m.";
+			document.getElementById('text4599').value ="Haaga House";
+			document.getElementById('text4553').value ="";
+			//clear activity 8
+			document.getElementById('text4693').value ="Depart from Campus";
+			document.getElementById('text4639').value ="5:00 p.m.";
+			document.getElementById('text4601').value ="";
+			document.getElementById('text4555').value ="";
+			//activity 9
+			document.getElementById('text4695').value ="";
+			document.getElementById('text4641').value ="";
+			document.getElementById('text4603').value ="";
+			document.getElementById('text4557').value ="";
+			//activity 10
+			document.getElementById('text4697').value ="";
+			document.getElementById('text4643').value ="";
+			document.getElementById('text4605').value ="";
+			document.getElementById('text4559').value ="";
+			break;
+			
+		default:
+			//do nothing
+			break;
+		
 	}
 }
 
@@ -844,7 +909,7 @@ function createCVReservationDateListener(){
 	if(checkViewFields(["date602Date","text598","text4421","text3381","text4061","text3983"])){
 		visitDate = document.getElementById("date602Date").value;
 		//Blank ability set through confirm box yes/no.
-		document.getElementById("date602Date").addEventListener("click",function(){clearDateChange(document.getElementById("date602Date"));});
+		document.getElementById("date602Date").addEventListener("click",function(){clearDateField(document.getElementById("date602Date"));});
 		document.getElementById("date602Date").addEventListener("keydown",function(e){e.preventDefault(); alert("Please use date picker to set the date.");});
 		document.getElementById("date602Date").addEventListener("focusout",checkCVResDateChange);
 		document.getElementById("text598").addEventListener("change",setArrivalTime);
@@ -859,6 +924,8 @@ function createCVReservationDateListener(){
 }
 
 //highlights contacts that are not financially eligible or not allowed to visit
+//Could be rewritten as a multi-use function.
+//Would need to pass inner text value and then I guess an array with negative values. Could also pass background color.
 function visitIndicatorChecks(x){
 	var checkInnerText;
 	var checkInnerLabel;
@@ -1005,12 +1072,6 @@ function createEEListeners(){
 		document.getElementById("text223").addEventListener("input", function(){setEEDate("text223","date6487Date","text3987");});
 		document.getElementById("text3987").readOnly = true;
 
-		//Looking at how to catch if the event listeners dodn't run properly. 
-		if(document.getElementById("text3987").readOnly !== true && document.getElementById("text3985").readOnly !== true){
-		console.log("Retrying E&E...");
-		createEEListeners();
-		}
-
 	} else{
 		recheckViewFields();
 	}
@@ -1031,9 +1092,8 @@ function setEEDate(EEName,EEDate,EEShadowName){
 
 //-----------//High School Transcript and Guidance Counselor View//-----------//
 function createHSTranscriptAndPercentListeners(){
-	if(checkViewFields(["text3703","numeric273","numeric277","text1415","text3265","hsname","text1501","numeric7963","date7349Date","hscode"])){
-		checkHSTranscriptNameChange();
-		adjustAcademicInitiativeDropdown();
+	if(checkViewFields(["text3703","numeric273","numeric277","text1415","text3265","hsname","text1501","numeric7963","date7349Date","hscode","hsstate","text1503"])){
+
 		//Class Rank Field
 		document.getElementById("numeric273").addEventListener("input",setClassRankPercentile);
 		//Class Size Field
@@ -1042,6 +1102,9 @@ function createHSTranscriptAndPercentListeners(){
 		document.getElementById("text1415").addEventListener("change",setClassRankPercentile);
 		//GED% Field
 		document.getElementById("text3265").addEventListener("input",setGEDField);
+		adjustAcademicInitiativeDropdown();
+		//This is causing issues!
+		createHSTranscriptButton();
 
 	} else{
 		recheckViewFields();
@@ -1092,30 +1155,27 @@ function adjustAcademicInitiativeDropdown(){
 
 }
 
-//How do I handle ones where the name is already there?
-//Looks for changes to HS Name and copies to HS transcript.
-function checkHSTranscriptNameChange(){
-	highSchoolName = document.getElementById("hsname").value;
-	console.log("HS transcript " + highSchoolName);
-	if(highSchoolName !=="" && document.getElementById("hscode").value !== "" && document.getElementById("text1501").value ===""){
-		document.getElementById("text1501").value = highSchoolName;
-	}
-	//set loop looking for the field to exist and be editable.
-	//resused fieldInterval as it has been cleared when we are able to edit.
-	fieldInterval = setInterval(function () {
-	if(document.getElementById("hsname").value !==""){
-		var newVal = document.getElementById("hsname").value;
-		//compare original hs name value to current value
-		if (highSchoolName === newVal) {
-		 } else{
-			//set the name to compare to.
-			highSchoolName = document.getElementById("hsname").value;
-			//copy the high school name.
-			document.getElementById("text1501").value = highSchoolName;
-		}
-	}
-	},100);
+
+function createHSTranscriptButton(){
+
+	//Create button to copy HS name.
+	//I removed the function that would auto copy by setInterval function.
+	var bereaButton = document.createElement("div");
+	bereaButton.style = "float:right";
+	bereaButton.id = "bereaButton";
+	bereaButton.innerHTML = "<div class='BereaDropdown'>"+
+		"<input ID='Berea_Menu_Button' value='Copy HS Info' class='BereaBlue bigbutton smallbutton new' type='button' onclick='return false;'>"+
+	  "</div>";
+	var buttonRow = document.getElementById('text1501');
+	buttonRow.parentNode.insertBefore(bereaButton, buttonRow.nextSibling);
+
+	document.getElementById("Berea_Menu_Button").addEventListener("click",function(){
+		document.getElementById("text1501").value = document.getElementById("hsname").value;
+		document.getElementById("text1503").value = document.getElementById("hsstate").value;
+		});
+
 }
+
 
 
 //sets and checks the class rank percentile.
@@ -1124,22 +1184,55 @@ function setClassRankPercentile(){
 	var classRank = document.getElementById("numeric273").value;
 	var classSize = document.getElementById("numeric277").value;
 	var percentileRequired = document.getElementById("text1415").value;
-
+	
 	if(percentileRequired !== "N"){
-		if(classRank !=="" && classSize !==""){
+		if(classRank !=="" && classSize !=="" && classSize >= 15){
 			document.getElementById("numeric7963").value = Math.round(100*(1-(classRank/classSize)));
 			 if( Math.round(100*(1-(classRank/classSize))) < 0){
-				document.getElementById("numeric7963").style.backgroundColor = "#ff717a";
+				document.getElementById("numeric7963").style.backgroundColor = "#FFFF00";
 			 }else{
 				document.getElementById("numeric7963").style.backgroundColor = "";
 			 }
+			 document.getElementById("text1415").style.backgroundColor = "";
+			 document.getElementById("numeric277").style.backgroundColor = "";
 			setDateField("date7349Date");
+			
+		}else if (classSize <15 && classSize !=""){
+			document.getElementById("text1415").style.backgroundColor = "#FFFF00";
+			document.getElementById("numeric277").style.backgroundColor = "#FFFF00";
+			document.getElementById("numeric7963").value = "";
+			
+		} else if((classRank =="" && classSize !=="" && classSize >= 15)||(classRank !=="" && classSize =="")){
+			document.getElementById("numeric7963").style.backgroundColor = "#FFFF00";
+			document.getElementById("numeric277").style.backgroundColor = "";
+			document.getElementById("text1415").style.backgroundColor = "";
+			document.getElementById("numeric7963").value = "";
+			clearDateField("date7349Date",false);
 		}
+		
+		
 	} else if(percentileRequired === "N"){
-		document.getElementById("numeric7963").value = "";
-		document.getElementById("numeric7963").style.backgroundColor = "";
-		setDateField("date7349Date");
+		
+		if(classSize === ""){
+			document.getElementById("numeric7963").style.backgroundColor = "";
+			document.getElementById("numeric7963").value = "";
+			document.getElementById("numeric7963").value = "";
+			clearDateField("date7349Date",false);
+		}else if(classSize < 15){
+			document.getElementById("numeric7963").value = "";
+			document.getElementById("numeric7963").style.backgroundColor = "";
+			document.getElementById("numeric277").style.backgroundColor = "";
+			document.getElementById("text1415").style.backgroundColor = "";
+			document.getElementById("numeric7963").value = "";
+			setDateField("date7349Date");
+		
+		}  else if(classSize >= 15){
+			document.getElementById("text1415").style.backgroundColor = "##FFFF00";
+			document.getElementById("numeric277").style.backgroundColor = "#FFFF00";
+			document.getElementById("numeric7963").value = "";
+		}	
 	}
+	
 }
 
 function setGEDField(){
@@ -1167,7 +1260,7 @@ function createFeeDateListener(){
 	if(checkViewFields(["date2951Date","numeric2821"])){
 		console.log("dec starting");
 		feeDate = document.getElementById("date2951Date").value;
-		document.getElementById("date2951Date").addEventListener("click",function(){clearDateChange(document.getElementById("date2951Date"));});
+		document.getElementById("date2951Date").addEventListener("click",function(){clearDateField("date2951Date");});
 		document.getElementById("date2951Date").addEventListener("keydown",function(e){e.preventDefault(); alert("Please use your date picker to set the date.");});
 		document.getElementById("date2951Date").addEventListener("focusout",checkFeeDateChange);
 		console.log("dec ending");
@@ -1216,63 +1309,8 @@ function setIntlAppProcDate(){
 }
 
 //--------------
-//Recruitment And Outreach Function
+//Recruitment And Outreach Functions
 //--------------
 
-//-----------//Interview Score Form View//-----------//
-//REMOVED AS WE NO LONGER USE INTERVIEWS. MAYBE ADJUST TO EREVIEW?
-//Sets listener for Interview Score total
-/* function createInterviewListeners(){
-	if(checkViewFields(["numeric4261","numeric4221","numeric4223","numeric4225","numeric4227","numeric4229","numeric4231","numeric4233","numeric4235","numeric4237","numeric4239","numeric4241","numeric4243","numeric4245"])=== true){
-		//Set "Int-Total" field listener
-		document.getElementById("numeric4261").addEventListener("input",checkInterviewScore);
-		//Set listeners for 1-13 as they may need to update the value if it doesn't match.
-		document.getElementById("numeric4221").addEventListener("input",checkInterviewScore);
-		document.getElementById("numeric4223").addEventListener("input",checkInterviewScore);
-		document.getElementById("numeric4225").addEventListener("input",checkInterviewScore);
-		document.getElementById("numeric4227").addEventListener("input",checkInterviewScore);
-		document.getElementById("numeric4229").addEventListener("input",checkInterviewScore);
-		document.getElementById("numeric4231").addEventListener("input",checkInterviewScore);
-		document.getElementById("numeric4233").addEventListener("input",checkInterviewScore);
-		document.getElementById("numeric4235").addEventListener("input",checkInterviewScore);
-		document.getElementById("numeric4237").addEventListener("input",checkInterviewScore);
-		document.getElementById("numeric4239").addEventListener("input",checkInterviewScore);
-		document.getElementById("numeric4241").addEventListener("input",checkInterviewScore);
-		document.getElementById("numeric4243").addEventListener("input",checkInterviewScore);
-		document.getElementById("numeric4245").addEventListener("input",checkInterviewScore);
-	} else{
-		recheckViewFields();
-	}
-}
 
-//Changes the background color of the Interview Total field if q1-q13 do or don't match
-function checkInterviewScore(){
-	//Pull all of our numbers in. The + in front is a "unary" operator and tries to conver the value to a number.
-	var q1 = +document.getElementById("numeric4221").value;
-	var q2 = +document.getElementById("numeric4223").value;
-	var q3 = +document.getElementById("numeric4225").value;
-	var q4 = +document.getElementById("numeric4227").value;
-	var q5 = +document.getElementById("numeric4229").value;
-	var q6 = +document.getElementById("numeric4231").value;
-	var q7 = +document.getElementById("numeric4233").value;
-	var q8 = +document.getElementById("numeric4235").value;
-	var q9 = +document.getElementById("numeric4237").value;
-	var q10 = +document.getElementById("numeric4239").value;
-	var q11 = +document.getElementById("numeric4241").value;
-	var q12 = +document.getElementById("numeric4243").value;
-	var q13 = +document.getElementById("numeric4245").value;
-	var intTotal = +document.getElementById("numeric4261").value;
-	var mytotal = q1+q2+q3+q4+q5+q6+q7+q8+q9+q10+q11+q12+q13;
-	//check and make sure my interview total is not blank
-	if(document.getElementById("numeric4261").value !==""){
-		//If question totals don't match, show red, otherwise, show green.
-		if(mytotal !== intTotal){
-			document.getElementById("numeric4261").style.backgroundColor= "#ff717a";
-		} else{
-			document.getElementById("numeric4261").style.backgroundColor= "#DAF7A6";
-		}
-	} else{
-		document.getElementById("numeric4261").style.backgroundColor = "";
-	}
-} */
 
