@@ -35,7 +35,7 @@
 <p>Below is a list of everything that the extension currently does.</p>
 <dl>
 <dt>Campus Visit Itinerary</dt>
-<dd>- Creates a button that allows the visit type (MWF - NO class, MWF - YES class, TR - AM, T - PM, Group Visit - AM, Group Visit - PM) and activities to be automatically populated or cleared.</dd>
+<dd>- Creates a button that allows the visit type (MWF - NO class/MWF - PM, MWF - YES class, TR - AM, T - PM, Group Visit - AM, Group Visit - PM) and activities to be automatically populated or cleared.</dd>
 <dd>- Reduces the Visit Type dropdown list. <dd>
 <dt>Campus Visit Reservation</dt>
 <dd>- Highlights "Visit Allowed" and "Financial Qualified Indicator" if they are set to "No" or Flagged, both when vieweing or editing. </dd>
@@ -43,8 +43,9 @@
 <dd>- When "Visit Type" is selected, the correct "Arrival Time" is populated or cleared. </dd>
 <dd>- Reduces the Visit Type dropdown list. <dd>
 <dt>HS Transcript / Counselor Evaluation Form</dt>
-<dd>- Data that is entered into the "High School Name" field, this is automatically. copied to the "High School Transcript Name" field. While &quot;High School Transcript Name&quot; can be updated without changing &quot;High School Name&quot;, any changes to &quot;High School Name&quot; will overwrite these changes. </dd>
+<dd>- Creates a button that allow the HS name and HS state to be copied to the HS Transcript Name and HS Transcript State field. </dd>
 <dd>- When the "Class Rank", "Class Size", or "Real Percentil Req?" is updated, the "Class Rank Percentile" is calculated and "Percentile Rec'd Date" is set for current date. (Note: If Percentile Required is flipped to "No", it removes the current percentile.)
+<dd>- If class size is less than 15, it will highlight the percentile required and class size fields just as a doubel check. ;</dd>
 <dd>- If "GED %" is entered and the "High School Transcript Name" is set to "GED", the "Class Rank", "Class Size", "Class Rank Percentile" are cleared, "Percentile Req?" is set to "No", and the date is set for the current day. 
 <dd>- Reduces the Academic Initiative dropdown list. <dd>
 <dt>Evaluations and Endorsements</dt>
@@ -52,8 +53,7 @@
 <dd>- The data entered into the "Real Evaluation-Endorsement 1" or "Real Evaluation-Endorsement 2" is copied to the shadow attribute, which is made read only.</dd>
 <dt>Dec of Intent / Ent Fee / Non-Enrolling Form</dt>
 <dd>- When the "Fall Ent Fee" date is populated, the "Fall Ent Fee" amount is populated with "50" to represent the $50 deposit. Clicking on the populated field will ask if you want to clear it, which woudl also clear the &quot;Fall Ent Fee&quot; amount. Must use the date picker to set the date. </dd>
-<dt><del>Interview Score Summary-Form</del> (Removed)</dt>
-<dd><del>- When the interview total is entered, if the total score is provided does not match the total of adding the questions together, the background of the field is colored red. If they match, it is colored green.</del></dd>
+<dt>&nbsp;</dt>
 <dt>International Apps Processing</dt>
 <dd>- When the "Intl App Status Indicator" is set for the first time, the "Intl App Processing Date" is populated with the current date.</dd>
 

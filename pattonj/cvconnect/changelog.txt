@@ -80,4 +80,11 @@ V0.9.7.5
 - Tweaked campus visit itinerary times. 
 - created script to highlight if certain fields are "NO" on the campus visit reservation screen. 
 
+V0.9.7.5
+- Removed Interview Code
+- Added MWF PM visit option
+- Changed HS transcript name function to use button instead of timeout loop. 
+- Also changed to copy HS state. 
+- Updated to highlight if class size is 15 or less and rank is marked as yes.  
+
 
