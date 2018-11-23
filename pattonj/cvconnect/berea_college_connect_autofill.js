@@ -6,15 +6,16 @@
 
 setListener();
 
-
 //variables
 var currentLocation;	//What's my URL?
 var viewDropDownValue;	//What's the view?
 var visitDate;			//What date mm/dd/yyyy am I visiting? (CV Registration View)
 var feeDate;			//What date mm/dd/yyyy was the deposit paid? (Dec of Intent View)
+var proofOfResDate;		//What date was proof of residency recorded?
 var fieldInterval;		//Loop for watching field
 var currentTime;		//Used to set date fields.
 var attempts = 0;		//Used to check how many attempts to load a view. Assumes that not all views are broken.
+var tabPressed;			//Used to determine if tab is being used to navigate and not show the alert.
 
 //on load, set main listener for dropdown view.
 function setListener() {
@@ -22,9 +23,9 @@ function setListener() {
 	currentLocation = window.location.pathname;
 	if(currentLocation === "/admin/Contacts/Search" || currentLocation === "/admin/Contacts/View" || currentLocation === "/admin/Contacts/Edit"){
 
-		//Run viewUpdate first. 
+		//Run viewUpdate first.
 		viewUpdate();
-		
+
 		//Replaced "contactViews", "editMode" and "newMode" event listeners with mutationObserver
 		//The "Loading" screen generally runs, but if you click "edit" or "view" from the search screen, it doesn't.
 		//Since the mutation observer wouldn't do any good, we need to ran viewUpdate above.
@@ -103,6 +104,13 @@ function viewUpdate(reloaded){
 		case "International Apps Processing":
 			fieldWatch ("text2961",createInternationalAppListener);
 			break;
+		case "Fall Checklist - New":
+		case "Fall Checklist - Transfer":
+			fieldWatch ("date209Date",createFallChecklistNewListener);
+			break;
+		case "Proof Of Residency":
+			fieldWatch ("date209Date",createProofofResidencyListener);
+			break;
 		default:
 			break;
 
@@ -147,16 +155,19 @@ function fieldWatch(myField,myFunction){
 
 //Clear if they select OK from the confirm box on click.
 function clearDateField(myDateField,warning){
+
 	if(warning === false){
 		document.getElementById(myDateField).value = "";
 	}
-	
-	else{if(myDateField.value === ""){
-		alert("Please use date picker to set the date.");
+
+	else{if(document.getElementById(myDateField).value == ""){
+			alert("Please use date picker to set the date.");
+			return;
 		}else{
 			if (confirm("Would you like to clear the date?\n \n (Please use date picker to set the date.)")){
 				document.getElementById(myDateField).value = "";
 			}else{
+				document.getElementById(myDateField).value = document.getElementById(myDateField).value;
 				return;
 			}
 		}
@@ -168,7 +179,7 @@ function clearDateField(myDateField,warning){
 function setDateField(myDateField){
 	currentTime = new Date();
 	document.getElementById(myDateField).value = (currentTime.getMonth() + 1) +"/"+currentTime.getDate()+"/"+currentTime.getFullYear();
-	
+
 }
 
 //Checking to see if the fields that are modified exist.
@@ -306,9 +317,9 @@ function createCVItineraryButton() {
 	document.getElementById("T_PM").addEventListener("click",function(){creatCVItinerary(4);});
 	document.getElementById("Group_AM").addEventListener("click",function(){creatCVItinerary(5);});
 	document.getElementById("Group_PM").addEventListener("click",function(){creatCVItinerary(6);});
-	//7 is legacy preview below. 
+	//7 is legacy preview below.
 	document.getElementById("MWF_PM").addEventListener("click",function(){creatCVItinerary(8);});
-	
+
 	//Before creating the event button, check for event date.
 	var EventDate = new Date('2018-10-06');
 	var CurrentDate = new Date();
@@ -340,19 +351,19 @@ function showCVItineraryMenu() {
 
 			window.onclick = function(event) {
 				//Close the dropdown menu if the user clicks outside of it
-			  if (!event.target.matches('.BereaBlue')) {
+				if (!event.target.matches('.BereaBlue')) {
 
-				var dropdowns = document.getElementsByClassName("BereaDropdown-content");
-				var i;
-				for (i = 0; i < dropdowns.length; i++) {
-				  var openDropdown = dropdowns[i];
-				  if (openDropdown.classList.contains('show')) {
-					openDropdown.classList.remove('show');
-				  }
+					var dropdowns = document.getElementsByClassName("BereaDropdown-content");
+					var i;
+					for (i = 0; i < dropdowns.length; i++) {
+					  var openDropdown = dropdowns[i];
+					  if (openDropdown.classList.contains('show')) {
+						openDropdown.classList.remove('show');
+					  }
+					}
+				} else{
+					return ;
 				}
-			  } else{
-				  return ;
-			  }
 			};
 
 
@@ -433,8 +444,8 @@ function creatCVItinerary(x){
 			document.getElementById('text4557').value ="";
 
 		break;
-		
-		//Without  Class sit-in	
+
+		//Without  Class sit-in
 		case 2:
 
 			//Visit Type
@@ -493,7 +504,7 @@ function creatCVItinerary(x){
 			document.getElementById('text4559').value ="";
 
 		break;
-		
+
 		case 3:
 			//Visit Type
 			document.getElementById('text598').value ="TR - AM";
@@ -550,7 +561,7 @@ function creatCVItinerary(x){
 			document.getElementById('text4605').value ="";
 			document.getElementById('text4559').value ="";
 		break;
-	
+
 		case 4:
 			//Visit Type
 			document.getElementById('text598').value ="T - PM";
@@ -607,8 +618,8 @@ function creatCVItinerary(x){
 			document.getElementById('text4605').value ="";
 			document.getElementById('text4559').value ="";
 		break;
-		
-		case 6:
+
+		case 5:
 			//Visit Type
 			document.getElementById('text598').value ="Group Visit - AM";
 			//Arrival Time
@@ -664,7 +675,7 @@ function creatCVItinerary(x){
 			document.getElementById('text4605').value ="";
 			document.getElementById('text4559').value ="";
 		break;
-		
+
 		case 6:
 			//Visit Type
 			document.getElementById('text598').value ="Group Visit - PM";
@@ -721,8 +732,8 @@ function creatCVItinerary(x){
 			document.getElementById('text4605').value ="";
 			document.getElementById('text4559').value ="";
 			break;
-		
-		//For Events		
+
+		//For Events
 		case 7:
 			//Visit Type
 			document.getElementById('text598').value ="Legacy Preview";
@@ -779,7 +790,7 @@ function creatCVItinerary(x){
 			document.getElementById('text4605').value ="";
 			document.getElementById('text4559').value ="";
 		break;
-		
+
 		case 8:
 			//visit type
 			document.getElementById('text598').value ="MWF - NO class";
@@ -836,11 +847,11 @@ function creatCVItinerary(x){
 			document.getElementById('text4605').value ="";
 			document.getElementById('text4559').value ="";
 			break;
-			
+
 		default:
 			//do nothing
 			break;
-		
+
 	}
 }
 
@@ -909,8 +920,8 @@ function createCVReservationDateListener(){
 	if(checkViewFields(["date602Date","text598","text4421","text3381","text4061","text3983"])){
 		visitDate = document.getElementById("date602Date").value;
 		//Blank ability set through confirm box yes/no.
-		document.getElementById("date602Date").addEventListener("click",function(){clearDateField(document.getElementById("date602Date"));});
-		document.getElementById("date602Date").addEventListener("keydown",function(e){e.preventDefault(); alert("Please use date picker to set the date.");});
+		document.getElementById("date602Date").addEventListener("click",function(){clearDateField("date602Date");});
+		document.getElementById("date602Date").addEventListener("keydown",function(e){if( e.which == 9 ) {return;} else{alert("Please use date picker to set the date.");}});
 		document.getElementById("date602Date").addEventListener("focusout",checkCVResDateChange);
 		document.getElementById("text598").addEventListener("change",setArrivalTime);
 		document.getElementById("text3983").addEventListener("change",function(){visitIndicatorChecks(2);});
@@ -970,9 +981,6 @@ function visitIndicatorChecks(x){
 			}
 	}
 }
-
-
-
 
 //pauses long enough wait for the date to be populated and then compare, and if needed set day.
 function checkCVResDateChange(){
@@ -1176,15 +1184,13 @@ function createHSTranscriptButton(){
 
 }
 
-
-
 //sets and checks the class rank percentile.
 function setClassRankPercentile(){
 
 	var classRank = document.getElementById("numeric273").value;
 	var classSize = document.getElementById("numeric277").value;
 	var percentileRequired = document.getElementById("text1415").value;
-	
+
 	if(percentileRequired !== "N"){
 		if(classRank !=="" && classSize !=="" && classSize >= 15){
 			document.getElementById("numeric7963").value = Math.round(100*(1-(classRank/classSize)));
@@ -1196,12 +1202,12 @@ function setClassRankPercentile(){
 			 document.getElementById("text1415").style.backgroundColor = "";
 			 document.getElementById("numeric277").style.backgroundColor = "";
 			setDateField("date7349Date");
-			
+
 		}else if (classSize <15 && classSize !=""){
 			document.getElementById("text1415").style.backgroundColor = "#FFFF00";
 			document.getElementById("numeric277").style.backgroundColor = "#FFFF00";
 			document.getElementById("numeric7963").value = "";
-			
+
 		} else if((classRank =="" && classSize !=="" && classSize >= 15)||(classRank !=="" && classSize =="")){
 			document.getElementById("numeric7963").style.backgroundColor = "#FFFF00";
 			document.getElementById("numeric277").style.backgroundColor = "";
@@ -1209,10 +1215,10 @@ function setClassRankPercentile(){
 			document.getElementById("numeric7963").value = "";
 			clearDateField("date7349Date",false);
 		}
-		
-		
+
+
 	} else if(percentileRequired === "N"){
-		
+
 		if(classSize === ""){
 			document.getElementById("numeric7963").style.backgroundColor = "";
 			document.getElementById("numeric7963").value = "";
@@ -1225,14 +1231,14 @@ function setClassRankPercentile(){
 			document.getElementById("text1415").style.backgroundColor = "";
 			document.getElementById("numeric7963").value = "";
 			setDateField("date7349Date");
-		
-		}  else if(classSize >= 15){
+
+		}else if(classSize >= 15){
 			document.getElementById("text1415").style.backgroundColor = "##FFFF00";
 			document.getElementById("numeric277").style.backgroundColor = "#FFFF00";
 			document.getElementById("numeric7963").value = "";
-		}	
+		}
 	}
-	
+
 }
 
 function setGEDField(){
@@ -1258,32 +1264,32 @@ function setGEDField(){
 function createFeeDateListener(){
 
 	if(checkViewFields(["date2951Date","numeric2821"])){
-		console.log("dec starting");
+		document.getElementById("date2951Date").addEventListener("focusout",function(){checkFeeDateChange();});
 		feeDate = document.getElementById("date2951Date").value;
 		document.getElementById("date2951Date").addEventListener("click",function(){clearDateField("date2951Date");});
-		document.getElementById("date2951Date").addEventListener("keydown",function(e){e.preventDefault(); alert("Please use your date picker to set the date.");});
-		document.getElementById("date2951Date").addEventListener("focusout",checkFeeDateChange);
-		console.log("dec ending");
+		document.getElementById("date2951Date").addEventListener("keydown",function(e){if( e.which == 9 ) {return;} else{ alert("Please use your date picker to set the date.");}});
 	} else{
 		recheckViewFields();
 	}
 }
 
 //Set fee amount, or clear the amount if the date is removed.
-//Not working when starting at view, then click edit on contact, then click calendar icon. How to fix this?
+//Once in a long time, it doesn't work when starting at view, then click edit on contact, then click calendar icon.
 function checkFeeDateChange(){
 
+	//Used set timeout so it only runs once and can finish focusing out, otherwise runs in a a loop.
 	setTimeout( function(){
 	if(document.getElementById("date2951Date").value !==""){
 		var newVal = document.getElementById("date2951Date").value;
 		//set loop looking for the field to exist and be editable.
 		if (feeDate === newVal) {
 			console.log("No change");
+
 		 } else{
 			feeDate = newVal;
-			console.log("Fee date needed");
 			//set fee amount field
 			document.getElementById("numeric2821").value = "50";
+			console.log("Fee amount set");
 		}
 	}else{
 		//clear fee amount field
@@ -1307,6 +1313,77 @@ function setIntlAppProcDate(){
 		setDateField("date2959Date");
 	}
 }
+
+//-----------//Fall Checklist - New View//-----------//
+//-----------//Fall Checklist - Transfer View//-----------//
+function createFallChecklistNewListener(){
+if(checkViewFields(["date209Date","text7923"])){
+		proofOfResDate = document.getElementById("date209Date").value;
+		document.getElementById("date209Date").readOnly = true;
+		document.getElementById("date209Date").addEventListener("focusout",function(){fallChecklistProofOfResidencyAlert();});
+		document.getElementById("date209Date").addEventListener("click",function(){document.activeElement.blur();});
+		document.getElementById("date209Date").addEventListener("keydown",function(e){if( e.which == 9 ) {tabPressed = true;}document.activeElement.blur();});
+
+	} else{
+		recheckViewFields();
+	}
+
+}
+
+function fallChecklistProofOfResidencyAlert(){
+	//Used set timeout so it only runs once and can finish focusing out, otherwise runs in a a loop.
+	setTimeout( function(){
+		if(tabPressed === true){
+			tabPressed = false;
+		}
+		else{
+			document.getElementById("date209Date").value = proofOfResDate;
+			alert("Please use the Proof of Residency view 3.");}
+	}, 100);
+}
+
+
+
+
+//-----------//Proof of Residency View//-----------//
+function createProofofResidencyListener(){
+if(checkViewFields(["date209Date","text7923"])){
+		proofOfResDate = document.getElementById("date209Date").value;
+		document.getElementById("date209Date").addEventListener("focusout",function(){proofOfResidencyAlert();});
+		document.getElementById("date209Date").addEventListener("click",function(){clearDateField("date209Date");});
+		document.getElementById("date209Date").addEventListener("keydown",function(e){if( e.which == 9 ) {tabPressed = true;} else{ alert("Please use your date picker to set the date.");}});
+
+	} else{
+		recheckViewFields();
+	}
+
+}
+
+function proofOfResidencyAlert(){
+	//Used set timeout so it only runs once and can finish focusing out, otherwise runs in a a loop.
+	setTimeout( function(){
+		if(tabPressed === true){
+			tabPressed = false;
+		}
+		else{
+			if(proofOfResDate == document.getElementById("date209Date").value){
+				//needed for when we click "cancel" on the clearDateField confirmation box.
+				return;
+			}else if(document.getElementById("text7923").value === "DACA" && document.getElementById("date209Date").value !==""){
+				alert("DACA APPLICANT\n \nPlease confirm that:\n\n The Category is C33 \n The expiration date is after 8/15/2019 \n");
+			}else if(document.getElementById("text7923").value !== "" && document.getElementById("date209Date").value !==""){
+				alert("Please confirm that:\n\n The expiration date is after 8/15/2019 \n");
+			}else if (document.getElementById("text7923").value == "" && document.getElementById("date209Date").value !==""){
+				document.getElementById("date209Date").value = "";
+				alert("Please select immigrant status type first.");
+			}
+			proofOfResDate = document.getElementById("date209Date").value;
+		}
+
+	}, 100);
+}
+
+
 
 //--------------
 //Recruitment And Outreach Functions
