@@ -12,28 +12,35 @@ var viewDropDownValue;	//What's the view?
 var visitDate;			//What date mm/dd/yyyy am I visiting? (CV Registration View)
 var feeDate;			//What date mm/dd/yyyy was the deposit paid? (Dec of Intent View)
 var proofOfResDate;		//What date was proof of residency recorded?
-var fieldInterval;		//Loop for watching field
+var fieldWatchTimer;	//Loop for watching field
 var currentTime;		//Used to set date fields.
 var attempts = 0;		//Used to check how many attempts to load a view. Assumes that not all views are broken.
-var tabPressed;			//Used to determine if tab is being used to navigate and not show the alert.
+var failSafeTimer;		//Used to clear the timer when needed
+var failSafeTimerValue = 300;	//Used to set the time for the timer.
+var failSafeTimerNum = 0; 		//Used to keep track of the number of times. 
+var viewTimer;			//Used to replace focusout for date fields as calendar icon doesn't always work. 
+
 
 //on load, set main listener for dropdown view.
 function setListener() {
-
+	
 	currentLocation = window.location.pathname;
 	if(currentLocation === "/admin/Contacts/Search" || currentLocation === "/admin/Contacts/View" || currentLocation === "/admin/Contacts/Edit"){
-
+	
 		//Run viewUpdate first.
 		viewUpdate();
 
 		//Replaced "contactViews", "editMode" and "newMode" event listeners with mutationObserver
-		//The "Loading" screen generally runs, but if you click "edit" or "view" from the search screen, it doesn't.
-		//Since the mutation observer wouldn't do any good, we need to ran viewUpdate above.
+		//The "Loading" screen generally runs, but if you click "edit" or "view" from the search screen, I'm not sure if it always does.
+		//Since the mutation observer wouldn't do any good, we run viewUpdate above.
 		 loadingScreenMutationObserver();
 	}
 }
 
+//
 function loadingScreenMutationObserver(){
+	//With the mutation observer, Connect loads the "Loading..." BlockUI box, removed the elements and HTML
+	//then once ready, removes the "Loading... block" ("blockUI blockOverlay" and "blockUI blockMsg blockElement" and adds the new fields.
 	//Example for Mutaion Observer - https://www.javascripture.com/MutationObserver
 		var LSmutationObserver = new MutationObserver(function(mutations) {
 			mutations.forEach(function(mutation) {
@@ -56,16 +63,48 @@ function loadingScreenMutationObserver(){
 			attributeOldValue: false,
 			characterDataOldValue: false
 		});
-//With the mutation observer, it loads the "Loading..." BlockUI box, removed the elements and HTML
-//then once ready, removes the "Loading... block" ("blockUI blockOverlay" and "blockUI blockMsg blockElement" and adds the new fields.
+
+}
+
+//Double checking to see if plugin functions still working. 
+//Sometimes the screen refreshes, and the listeners I set are lost (not sure why), but it happens right after loading. 
+//I've seen it with the blue button for HS Transcript showing up and then disapearing on a slower computer. 
+//Occasionally on my computer listeners aren't added/disapear even if it says they are added. 
+function failSafe(){
+	if (document.contains(document.getElementById('addonWorking'))){
+		if(document.getElementById('addonWorking').innerHTML == "BC Plugin Working"){
+			failSafeTimerNum++;
+			if(failSafeTimerNum > 15 && failSafeTimerValue == 300){
+				failSafeTimerValue = 2000;
+			} else if(failSafeTimerNum > 50){
+				clearTimeout(failSafeTimer);
+				return;
+			}
+			failSafeTimer = setTimeout(function(){ failSafe(); }, failSafeTimerValue);
+			return;
+		}
+		else{
+			console.log("BC Plugin Working not found, reloading plugin");
+			viewUpdate();
+		}
+		
+	} else{
+		console.log("ID not found, reloading plugin");
+		viewUpdate();
+	}
 }
 
 //view change function
 function viewUpdate(reloaded){
 	console.log("View Update starting");
-	//Make sure we clear interval for the field if we are watching for a change.
-	clearInterval(fieldInterval);
-
+	
+	//Make sure we clear intervals for the field if we are watching for a change.
+	clearInterval(fieldWatchTimer);
+	clearTimeout(viewTimer);
+	clearTimeout (failSafeTimer); 
+	failSafeTimerNum = 0; 
+	failSafeTimerValue = 300; 
+	
 	//Used to reset attempts to zero since we are not just retrying the viewUpdate function.
 	if(reloaded !== true){
 		attempts = 0;
@@ -76,6 +115,22 @@ function viewUpdate(reloaded){
 		var oldButton = document.getElementById("bereaButton");
 		oldButton.remove();
 	}
+	//Remove plugin Status
+	if (document.contains(document.getElementById('addonWorking'))){
+		var failSafeText = document.getElementById("addonWorking");
+		failSafeText.remove();
+	}
+	
+	//The only advantage to the plugin status here, is it would show up on ALL screens. 
+	//the other place to put it is under fieldwatch before the function runs. 
+	//But, it should stay once added to the screen until viewupdate is run again. 
+	var bereaAddonWorking = document.createElement("div");
+	bereaAddonWorking.style = "clear:both;float:right";
+	bereaAddonWorking.id = "addonWorking";
+	bereaAddonWorking.innerHTML = "BC Plugin Working";
+		
+	var searchFieldChild = document.querySelectorAll('#searchFields>.contactAttributes')[0] ;
+	searchFieldChild.appendChild(bereaAddonWorking);
 
 	//Get the title of the selected dropdown value and remove * (default view symbol if needed.
 	viewDropDownValue = document.getElementById("contactViews").options[document.getElementById("contactViews").selectedIndex].title;
@@ -83,7 +138,7 @@ function viewUpdate(reloaded){
 		viewDropDownValue = viewDropDownValue.slice(0, -1);
 	}
 
-	//Rewrote as a switch instead of if/else since I added actions.
+	//Rewrote as a switch instead of if/else to be able to easily expand
 	switch (viewDropDownValue){
 		case "Campus Visit Itinerary":
 			fieldWatch("text598",createCVItineraryButton);
@@ -113,8 +168,8 @@ function viewUpdate(reloaded){
 			break;
 		default:
 			break;
-
 	}
+	
 	console.log("View Update completed");
 
 }
@@ -123,37 +178,36 @@ function viewUpdate(reloaded){
 function fieldWatch(myField,myFunction){
 	console.log("fieldwatch start");
 	//set loop looking for the field I passed to exist and be editable.
-	fieldInterval = setInterval(function () {
+	fieldWatchTimer = setTimeout(function () {
 		if(document.contains(document.getElementById(myField))){
 			if (document.getElementById(myField).disabled === false) {
 
 				//Once available and editable, stop looking and run the passed function.
-				clearInterval(fieldInterval);
-
+				clearTimeout(fieldWatchTimer);
 				console.log("Watched Field Found, running " + myFunction.name);
 				myFunction();
 				console.log("function was run");
+				//start failSafe to see if the screen changes. 
+				failSafe();
 
 			}
 			else{
 				//since it exists and isn't edible, stop watching.
-				clearInterval(fieldInterval);
+				clearTimeout(fieldWatchTimer);
+				console.log("Watched field, but can't edit. ");
 			}
-
 		}
 		else{
 			console.log("Watched field not found");
-
+			fieldWatch(myField,myFunction);
 		}
-
-
 	}, 100);
 }
 
 
 //-----------//Multi-use functions//-----------//
 
-//Clear if they select OK from the confirm box on click.
+//Clear date if they select OK from the confirm box on click.
 function clearDateField(myDateField,warning){
 
 	if(warning === false){
@@ -208,6 +262,17 @@ function recheckViewFields(){
 	}
 }
 
+//Used to track date fields (or possible others) on views. 
+function setViewTimer(myFunction,runOnce){
+	if(runOnce === true){
+		viewTimer = setTimeout(function(){myFunction();
+		}, 100);
+	}
+	else{
+		viewTimer = setTimeout(function(){myFunction(); setViewTimer(myFunction);
+		}, 400);
+	}
+}
 
 //--------------
 //Campus Visit Functions
@@ -282,7 +347,7 @@ function createCVItineraryButton() {
 
 	/*Dropdown menu from here https://www.w3schools.com/howto/howto_js_dropdown.asp*/
 	//Create our HTML to inject.
-	//Just as a side note incase I ever need to insert a script code
+	//Just as a side note in case I ever need to insert a script code
 	//https://www.danielcrabtree.com/blog/25/gotchas-with-dynamically-adding-script-tags-to-html
 	var bereaButton = document.createElement("div");
 	bereaButton.style = "float:right";
@@ -638,15 +703,15 @@ function creatCVItinerary(x){
 			document.getElementById('text4683').value ="Registration";
 			document.getElementById('text4629').value ="11:10 a.m.";
 			document.getElementById('text4591').value ="Haaga House";
-			document.getElementById('text4545').value ="- Presentation Room";
+			document.getElementById('text4545').value ="- Lobby";
 			//activity 4
 			document.getElementById('text4685').value ="Admissions Video";
-			document.getElementById('text4631').value ="11:15 a.m.";
+			document.getElementById('text4631').value ="11:20 a.m.";
 			document.getElementById('text4593').value ="Haaga House";
 			document.getElementById('text4547').value ="- Presentation Room";
 			//activity 5
 			document.getElementById('text4687').value ="Information Session";
-			document.getElementById('text4633').value ="11:25 a.m.";
+			document.getElementById('text4633').value ="11:30 a.m.";
 			document.getElementById('text4595').value ="Haaga House";
 			document.getElementById('text4549').value ="- Presentation Room";
 			//activity 6
@@ -920,9 +985,9 @@ function createCVReservationDateListener(){
 	if(checkViewFields(["date602Date","text598","text4421","text3381","text4061","text3983"])){
 		visitDate = document.getElementById("date602Date").value;
 		//Blank ability set through confirm box yes/no.
+		setViewTimer(checkCVResDateChange);
 		document.getElementById("date602Date").addEventListener("click",function(){clearDateField("date602Date");});
-		document.getElementById("date602Date").addEventListener("keydown",function(e){if( e.which == 9 ) {return;} else{alert("Please use date picker to set the date.");}});
-		document.getElementById("date602Date").addEventListener("focusout",checkCVResDateChange);
+		document.getElementById("date602Date").addEventListener("keydown",function(e){if( e.which == 9 ) {return;} else{ e.preventDefault(); alert("Please use date picker to set the date.");}});
 		document.getElementById("text598").addEventListener("change",setArrivalTime);
 		document.getElementById("text3983").addEventListener("change",function(){visitIndicatorChecks(2);});
 		document.getElementById("text4061").addEventListener("change",function(){visitIndicatorChecks(2);});
@@ -984,18 +1049,12 @@ function visitIndicatorChecks(x){
 
 //pauses long enough wait for the date to be populated and then compare, and if needed set day.
 function checkCVResDateChange(){
-	console.log("Focused out");
-	setTimeout( function(){
-	console.log("timeout set");
 	if(document.getElementById("date602Date").value !==""){
-	console.log("not empty");
 		var newVal = document.getElementById("date602Date").value;
 		//set loop looking for the field to exist and be editable.
 		if (visitDate === newVal) {
-			console.log("no change");
 			return;
 		 } else{
-			console.log("change");
 			visitDate = newVal;
 			//Grab date and update the field.
 			switch(new Date(document.getElementById("date602Date").value).getDay()){
@@ -1025,11 +1084,10 @@ function checkCVResDateChange(){
 			}
 		}
 	}else{
-		console.log("empty");
 		document.getElementById("text4421").value = "";
 		visitDate="";
 	}
-	},100);
+
 }
 
 //used to set the arrival time when session type is selected
@@ -1110,8 +1168,9 @@ function createHSTranscriptAndPercentListeners(){
 		document.getElementById("text1415").addEventListener("change",setClassRankPercentile);
 		//GED% Field
 		document.getElementById("text3265").addEventListener("input",setGEDField);
+		//Adjust Adcademic Intitiave List
 		adjustAcademicInitiativeDropdown();
-		//This is causing issues!
+		//Create button to copy HS Transcript
 		createHSTranscriptButton();
 
 	} else{
@@ -1264,39 +1323,34 @@ function setGEDField(){
 function createFeeDateListener(){
 
 	if(checkViewFields(["date2951Date","numeric2821"])){
-		document.getElementById("date2951Date").addEventListener("focusout",function(){checkFeeDateChange();});
+		
 		feeDate = document.getElementById("date2951Date").value;
-		document.getElementById("date2951Date").addEventListener("click",function(){clearDateField("date2951Date");});
-		document.getElementById("date2951Date").addEventListener("keydown",function(e){if( e.which == 9 ) {return;} else{ alert("Please use your date picker to set the date.");}});
+		console.log(feeDate);
+		//Replaced focusout or keydown with timer. 
+		setViewTimer(checkFeeDateChange); 
 	} else{
 		recheckViewFields();
 	}
 }
 
+
 //Set fee amount, or clear the amount if the date is removed.
-//Once in a long time, it doesn't work when starting at view, then click edit on contact, then click calendar icon.
 function checkFeeDateChange(){
-
-	//Used set timeout so it only runs once and can finish focusing out, otherwise runs in a a loop.
-	setTimeout( function(){
-	if(document.getElementById("date2951Date").value !==""){
-		var newVal = document.getElementById("date2951Date").value;
-		//set loop looking for the field to exist and be editable.
-		if (feeDate === newVal) {
-			console.log("No change");
-
-		 } else{
-			feeDate = newVal;
-			//set fee amount field
-			document.getElementById("numeric2821").value = "50";
-			console.log("Fee amount set");
-		}
-	}else{
-		//clear fee amount field
+	if(feeDate == document.getElementById("date2951Date").value){
+		//needed for when the date doesn't change. 
+		return;
+	}else if(document.getElementById("numeric2821").value !== "" && document.getElementById("date2951Date").value ==""){
+		feeDate = document.getElementById("date2951Date").value;
 		document.getElementById("numeric2821").value = "";
-		feeDate = "";
+		console.log("Deposit amount removed");
+	}else if(document.getElementById("numeric2821").value !== "" && document.getElementById("date2951Date").value !==""){
+		feeDate = document.getElementById("date2951Date").value;
+		console.log("Already has deposit amount");
+	}else if(document.getElementById("numeric2821").value == "" && document.getElementById("date2951Date").value !==""){
+		feeDate = document.getElementById("date2951Date").value;
+		document.getElementById("numeric2821").value = "50";
+		console.log ("$50 added to deposit field");
 	}
-	},100);
 }
 
 //-----------//International Apps Processing View//-----------//
@@ -1320,38 +1374,39 @@ function createFallChecklistNewListener(){
 if(checkViewFields(["date209Date","text7923"])){
 		proofOfResDate = document.getElementById("date209Date").value;
 		document.getElementById("date209Date").readOnly = true;
-		document.getElementById("date209Date").addEventListener("focusout",function(){fallChecklistProofOfResidencyAlert();});
-		document.getElementById("date209Date").addEventListener("click",function(){document.activeElement.blur();});
-		document.getElementById("date209Date").addEventListener("keydown",function(e){if( e.which == 9 ) {tabPressed = true;}document.activeElement.blur();});
-
+		setViewTimer(fallChecklistProofOfResidencyAlert);
+		document.getElementById("date209Date").addEventListener("click",function(){document.activeElement.blur();fallChecklistProofOfResidencyAlert(true);});
+		document.getElementById("date209Date").addEventListener("keydown",function(e){if( e.which == 9 ) {return;}document.activeElement.blur();fallChecklistProofOfResidencyAlert(true);});
 	} else{
 		recheckViewFields();
 	}
 
 }
 
-function fallChecklistProofOfResidencyAlert(){
-	//Used set timeout so it only runs once and can finish focusing out, otherwise runs in a a loop.
-	setTimeout( function(){
-		if(tabPressed === true){
-			tabPressed = false;
-		}
-		else{
+function fallChecklistProofOfResidencyAlert(alertOnly){
+	if(alertOnly === true){
 			document.getElementById("date209Date").value = proofOfResDate;
-			alert("Please use the Proof of Residency view 3.");}
-	}, 100);
+			alert("Please use the Proof of Residency view.");
+	}
+	else{
+		if(proofOfResDate == document.getElementById("date209Date").value){
+			//needed for when the date doesn't change.
+			return;
+		}else {
+			document.getElementById("date209Date").value = proofOfResDate;
+			alert("Please use the Proof of Residency view.");
+		}
+	}
 }
-
-
 
 
 //-----------//Proof of Residency View//-----------//
 function createProofofResidencyListener(){
 if(checkViewFields(["date209Date","text7923"])){
 		proofOfResDate = document.getElementById("date209Date").value;
-		document.getElementById("date209Date").addEventListener("focusout",function(){proofOfResidencyAlert();});
+		setViewTimer(proofOfResidencyAlert);
 		document.getElementById("date209Date").addEventListener("click",function(){clearDateField("date209Date");});
-		document.getElementById("date209Date").addEventListener("keydown",function(e){if( e.which == 9 ) {tabPressed = true;} else{ alert("Please use your date picker to set the date.");}});
+		document.getElementById("date209Date").addEventListener("keydown",function(e){if( e.which == 9 ) {return;} else{ e.preventDefault(); alert("Please use your date picker to set the date.");}});
 
 	} else{
 		recheckViewFields();
@@ -1360,34 +1415,23 @@ if(checkViewFields(["date209Date","text7923"])){
 }
 
 function proofOfResidencyAlert(){
-	//Used set timeout so it only runs once and can finish focusing out, otherwise runs in a a loop.
-	setTimeout( function(){
-		if(tabPressed === true){
-			tabPressed = false;
-		}
-		else{
-			if(proofOfResDate == document.getElementById("date209Date").value){
-				//needed for when we click "cancel" on the clearDateField confirmation box.
-				return;
-			}else if(document.getElementById("text7923").value === "DACA" && document.getElementById("date209Date").value !==""){
-				alert("DACA APPLICANT\n \nPlease confirm that:\n\n The Category is C33 \n The expiration date is after 8/15/2019 \n");
-			}else if(document.getElementById("text7923").value !== "" && document.getElementById("date209Date").value !==""){
-				alert("Please confirm that:\n\n The expiration date is after 8/15/2019 \n");
-			}else if (document.getElementById("text7923").value == "" && document.getElementById("date209Date").value !==""){
-				document.getElementById("date209Date").value = "";
-				alert("Please select immigrant status type first.");
-			}
-			proofOfResDate = document.getElementById("date209Date").value;
-		}
-
-	}, 100);
+	if(proofOfResDate == document.getElementById("date209Date").value){
+		//needed for when the date doesn't change.
+		return;
+	}else if(document.getElementById("text7923").value === "DACA" && document.getElementById("date209Date").value !==""){
+		proofOfResDate = document.getElementById("date209Date").value;
+		alert("DACA APPLICANT\n \nPlease confirm that:\n\n The Category is C33 \n The expiration date is after 8/15/2019 \n");
+	}else if(document.getElementById("text7923").value !== "" && document.getElementById("date209Date").value !==""){
+		proofOfResDate = document.getElementById("date209Date").value;
+		alert("Please confirm that:\n\n The expiration date is after 8/15/2019 \n");
+	}else if (document.getElementById("text7923").value == "" && document.getElementById("date209Date").value !==""){
+		document.getElementById("date209Date").value = "";
+		alert("Please select immigrant status type first.");
+	}
 }
-
-
 
 //--------------
 //Recruitment And Outreach Functions
 //--------------
 
-
-
+//None currently. 

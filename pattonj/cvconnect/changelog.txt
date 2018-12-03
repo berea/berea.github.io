@@ -94,4 +94,14 @@ V0.9.7.7 (11/23/18)
 - Fixed bug with group PM visit. 
 - Updated code to allow for navigation by tabbing without showing alert for the date fields. 
 
+V0.9.7.8 (beta)
+- Fixed Typo in alert box. 
+- tweaked code for Declaration of Intent/Fee date. (Should help fix error with fee not populating). 
+
+V0.9.8
+- Update Group AM visit schedule
+- Re-wrote how I looked for changes to date fields. On FocusOut wasn't working consistently, so I went to using a timer that loops. 
+- Wrote a "failsafe" function so that if the view is painted/updated after the function runs, it can rerun if things are removed. 
+
+
 
