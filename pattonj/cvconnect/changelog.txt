@@ -104,4 +104,14 @@ V0.9.8
 - Wrote a "failsafe" function so that if the view is painted/updated after the function runs, it can rerun if things are removed. 
 
 
+V0.9.8.1 (2/12/19)
+- Added MWF AM/PM visit. 
+
+V0.9.8.2 (4/25/19)
+- Added Summer AM/PM
+- Moved previous options to submenu. 
+- Split main .js file into several smaller files. 
+ 
+
+
 
