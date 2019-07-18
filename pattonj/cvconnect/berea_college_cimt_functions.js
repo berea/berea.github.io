@@ -45,16 +45,16 @@ function setEEDate(EEName,EEDate,EEShadowName){
 
 //-----------//High School Transcript and Guidance Counselor View//-----------//
 function createHSTranscriptAndPercentListeners(){
-	if(checkViewFields(["text3703","numeric273","numeric277","text1415","text3265","hsname","text1501","numeric7963","date7349Date","hscode","hsstate","text1503"])){
+	if(checkViewFields(["text3703", "date7349Date","numeric273","numeric277","text3265","hsname","text1501","numeric7963","date7349Date","hscode","hsstate","text1503"])){
 
 		//Class Rank Field
 		document.getElementById("numeric273").addEventListener("input",setClassRankPercentile);
 		//Class Size Field
 		document.getElementById("numeric277").addEventListener("input",setClassRankPercentile);
-		//Class Percentile Field
-		document.getElementById("text1415").addEventListener("change",setClassRankPercentile);
 		//GED% Field
 		document.getElementById("text3265").addEventListener("input",setGEDField);
+		//Academic Initiative
+		document.getElementById("text3703").addEventListener("input", setAcademicInitiativeDate);
 		//Adjust Adcademic Intitiave List
 		adjustAcademicInitiativeDropdown();
 		//Create button to copy HS Transcript
@@ -64,6 +64,16 @@ function createHSTranscriptAndPercentListeners(){
 		recheckViewFields();
 	}
 }
+
+function setAcademicInitiativeDate(){
+	var dropdownOption=document.getElementById('text3703').value;
+	if (dropdownOption == ""){
+		clearDateField("date7349Date",false);
+	}else{
+		setDateField("date7349Date");
+	}
+}
+
 
 function adjustAcademicInitiativeDropdown(){
 	//Get the visit type dropdown.
@@ -135,56 +145,25 @@ function setClassRankPercentile(){
 
 	var classRank = document.getElementById("numeric273").value;
 	var classSize = document.getElementById("numeric277").value;
-	var percentileRequired = document.getElementById("text1415").value;
 
-	if(percentileRequired !== "N"){
-		if(classRank !=="" && classSize !=="" && classSize >= 15){
-			document.getElementById("numeric7963").value = Math.round(100*(1-(classRank/classSize)));
-			 if( Math.round(100*(1-(classRank/classSize))) < 0){
-				document.getElementById("numeric7963").style.backgroundColor = "#FFFF00";
-			 }else{
-				document.getElementById("numeric7963").style.backgroundColor = "";
-			 }
-			 document.getElementById("text1415").style.backgroundColor = "";
-			 document.getElementById("numeric277").style.backgroundColor = "";
-			setDateField("date7349Date");
-
-		}else if (classSize <15 && classSize !=""){
-			document.getElementById("text1415").style.backgroundColor = "#FFFF00";
-			document.getElementById("numeric277").style.backgroundColor = "#FFFF00";
-			document.getElementById("numeric7963").value = "";
-
-		} else if((classRank =="" && classSize !=="" && classSize >= 15)||(classRank !=="" && classSize =="")){
+	
+	if(classRank !=="" && classSize !==""){
+		document.getElementById("numeric7963").value = Math.round(100*(1-(classRank/classSize)));
+		 if( Math.round(100*(1-(classRank/classSize))) < 0){
 			document.getElementById("numeric7963").style.backgroundColor = "#FFFF00";
-			document.getElementById("numeric277").style.backgroundColor = "";
-			document.getElementById("text1415").style.backgroundColor = "";
-			document.getElementById("numeric7963").value = "";
-			clearDateField("date7349Date",false);
-		}
-
-
-	} else if(percentileRequired === "N"){
-
-		if(classSize === ""){
+		 }else{
 			document.getElementById("numeric7963").style.backgroundColor = "";
-			document.getElementById("numeric7963").value = "";
-			document.getElementById("numeric7963").value = "";
-			clearDateField("date7349Date",false);
-		}else if(classSize < 15){
-			document.getElementById("numeric7963").value = "";
-			document.getElementById("numeric7963").style.backgroundColor = "";
-			document.getElementById("numeric277").style.backgroundColor = "";
-			document.getElementById("text1415").style.backgroundColor = "";
-			document.getElementById("numeric7963").value = "";
-			setDateField("date7349Date");
-
-		}else if(classSize >= 15){
-			document.getElementById("text1415").style.backgroundColor = "##FFFF00";
-			document.getElementById("numeric277").style.backgroundColor = "#FFFF00";
-			document.getElementById("numeric7963").value = "";
-		}
+		 }
+		
+		 document.getElementById("numeric277").style.backgroundColor = "";
+		//setDateField("date7349Date");
+		
+	} else if((classRank =="" && classSize !=="")||(classRank !=="" && classSize =="")){
+		document.getElementById("numeric7963").style.backgroundColor = "#FFFF00";
+		document.getElementById("numeric277").style.backgroundColor = "";
+		document.getElementById("numeric7963").value = "";
+		//clearDateField("date7349Date",false);
 	}
-
 }
 
 function setGEDField(){
@@ -197,10 +176,8 @@ function setGEDField(){
 		//class percentile (and in case it was red)
 		document.getElementById("numeric7963").value = "";
 		document.getElementById("numeric7963").style.backgroundColor = "";
-		//percentile required
-		document.getElementById("text1415").value = "N";
-		//Set percentile Recorded Date
-		setDateField("date7349Date");
+		//Set percentile Recorded Date - UPDATE
+		//setDateField("date7349Date");
 
 	}
 

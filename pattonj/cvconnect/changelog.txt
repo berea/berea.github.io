@@ -111,6 +111,13 @@ V0.9.8.2 (4/25/19)
 - Added Summer AM/PM
 - Moved previous options to submenu. 
 - Split main .js file into several smaller files. 
+
+V0.9.8.3 (6/11/19)
+- Adjusted for Percentile not required and Academic Intiative. 
+
+V0.9.8.4 (7/18/19)
+- fixed error when Academic Iniativeis set back to "Select one"
+- Updated Campus Visit Itinerary for Fall 2019. 
  
 
 
