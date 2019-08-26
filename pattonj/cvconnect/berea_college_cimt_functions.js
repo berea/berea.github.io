@@ -16,7 +16,7 @@ var proofOfResDate;		//What date was proof of residency recorded?
 
 //create the listeners for the text boxes
 function createEEListeners(){
-	if(checkViewFields(["text219","date6485Date","text3985","text223","date6487Date","text3987"])){
+	if(checkViewFields(["text219","date6485Date","text3985","text223","date6487Date","text3987","text695","text3283","date7661Date"])){
 		//set listener for name 1
 		document.getElementById("text219").addEventListener("input", function(){setEEDate("text219","date6485Date","text3985");});
 		document.getElementById("text3985").readOnly = true;
@@ -24,6 +24,9 @@ function createEEListeners(){
 		//set listener for name 2
 		document.getElementById("text223").addEventListener("input", function(){setEEDate("text223","date6487Date","text3987");});
 		document.getElementById("text3987").readOnly = true;
+		
+		//run function to verify GED & Home School Recomendations
+		modifyRecomendationRequirements();
 
 	} else{
 		recheckViewFields();
@@ -42,7 +45,27 @@ function setEEDate(EEName,EEDate,EEShadowName){
 	document.getElementById(EEShadowName).value = document.getElementById(EEName).value;
 }
 
+//Used to alert about GED or Homeschool requirment being different. 
+function modifyRecomendationRequirements(){
+	document.getElementById("text695").disabled = true;
+	document.getElementById("text695").style.color = "#000000";
+	document.getElementById("text3283").disabled = true;
+	document.getElementById("text3283").style.color = "#000000";
+	//show alert if it's either GED or Homeschool is Yes (and E&E 1 or E&E 2 are empty). 
+	document.getElementById("date7661Date").addEventListener("click",recomendationAlert);
+	}
+//show alert from modifyRecomendationRequirements function. 
+function recomendationAlert(){
+	//check to make sure EE1 or EE2 is empty and is homeschooled or GED.  
+	if((document.getElementById("text695").value =="GEDX" || document.getElementById("text3283").value=="Y")&& (document.getElementById("text219").value =="" || document.getElementById("text223").value =="") ){
+		alert("GED OR HOME SCHOOLED\n ----Core Teacher not Required--- \n\nIf recomendation form was used, please enter on right side in Recomendation 1 or 2."); 
+	}
+	else{
+		return;
+	}
+}	
 
+	
 //-----------//High School Transcript and Guidance Counselor View//-----------//
 function createHSTranscriptAndPercentListeners(){
 	if(checkViewFields(["text3703", "date7349Date","numeric273","numeric277","text3265","hsname","text1501","numeric7963","date7349Date","hscode","hsstate","text1503"])){

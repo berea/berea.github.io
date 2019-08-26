@@ -89,10 +89,11 @@ function createCVItineraryButton() {
 	bereaButton.innerHTML = "<div class='BereaDropdown'>"+
 		"<input ID='Berea_Menu_Button' value='Berea Visits' class='BereaBlue bigbutton new' type='button' onclick='return false;'>"+
 		"<div id='BereaMenu' class='BereaDropdown-content'>"+
-					"<a href='#' ID='MWF_Yes_Class' onclick='return false;'>MWF - YES Class</a>"+
-					"<a href='#' ID='MWF_No_Class' onclick='return false;'>MWF - NO Class</a>"+	
-					"<a href='#' ID='TR_AM' onclick='return false;'>TR - AM</a>"+
-					"<a href='#' ID='T_PM' onclick='return false;'>T - PM</a>"+
+					"<a href='#' ID='4star_Yes_Class' onclick='return false;'>4* - YES Class</a>"+
+					"<a href='#' ID='4star_No_Class' onclick='return false;'>4* - NO Class</a>"+	
+					"<a href='#' ID='4star_PM' onclick='return false;'>Special 4* PM</a>"+	
+					"<a href='#' ID='General_AM' onclick='return false;'>General - AM</a>"+
+					"<a href='#' ID='General_PM' onclick='return false;'>General - PM</a>"+
 							
 		"<a href='#' class='showSubmenu' onclick='return false;'>Summer 19<span style='float:right;'>&#x25B8; </span></a>"+
 			"<div class='BereaSubmenu' style='position: relative; width: 0; height: 0'>"+
@@ -132,11 +133,12 @@ function createCVItineraryButton() {
 	document.getElementById("Summer_Group_PM").addEventListener("click",function(){creatCVItinerary(4);});
 	
 	
-	document.getElementById("MWF_No_Class").addEventListener("click",function(){creatCVItinerary(5);});
-	document.getElementById("MWF_Yes_Class").addEventListener("click",function(){creatCVItinerary(6);});
+	document.getElementById("4star_No_Class").addEventListener("click",function(){creatCVItinerary(5);});
+	document.getElementById("4star_Yes_Class").addEventListener("click",function(){creatCVItinerary(6);});
+	document.getElementById("4star_PM").addEventListener("click",function(){creatCVItinerary(10);});
 	document.getElementById("Group_AM").addEventListener("click",function(){creatCVItinerary(9);});
-	document.getElementById("TR_AM").addEventListener("click",function(){creatCVItinerary(7);});
-	document.getElementById("T_PM").addEventListener("click",function(){creatCVItinerary(8);});
+	document.getElementById("General_AM").addEventListener("click",function(){creatCVItinerary(7);});
+	document.getElementById("General_PM").addEventListener("click",function(){creatCVItinerary(8);});
 	
 	//legacy preview/event below.
 	
@@ -483,7 +485,7 @@ function creatCVItinerary(x){
 		
 		case 5:
 			//Visit Type
-			document.getElementById('text598').value ="MWF - NO class";
+			document.getElementById('text598').value ="4* - NO class";
 			//Arrival Time
 			document.getElementById('text3381').value ="9:30 a.m.";
 			//activity 1 (Activity, time, location, detail)
@@ -507,7 +509,7 @@ function creatCVItinerary(x){
 			document.getElementById('text4593').value ="";
 			document.getElementById('text4547').value ="";
 			//activity 5
-			document.getElementById('text4687').value ="Tour and Swag Session";
+			document.getElementById('text4687').value ="Tour of Campus";
 			document.getElementById('text4633').value ="11:00 a.m.";
 			document.getElementById('text4595').value ="";
 			document.getElementById('text4549').value ="With Student Ambassador";
@@ -540,7 +542,7 @@ function creatCVItinerary(x){
 
 		case 6:
 			//Visit Type
-			document.getElementById('text598').value ="MWF - YES class";
+			document.getElementById('text598').value ="4* - YES class";
 			//Arrival Time
 			document.getElementById('text3381').value ="9:30 a.m.";
 			//activity 1 (Activity, time, location, detail)
@@ -564,7 +566,7 @@ function creatCVItinerary(x){
 			document.getElementById('text4593').value ="";
 			document.getElementById('text4547').value ="";
 			//activity 5
-			document.getElementById('text4687').value ="Tour and Swag Session";
+			document.getElementById('text4687').value ="Tour of Campus";
 			document.getElementById('text4633').value ="11:00 a.m.";
 			document.getElementById('text4595').value ="";
 			document.getElementById('text4549').value ="With Student Ambassador";
@@ -598,7 +600,7 @@ function creatCVItinerary(x){
 
 		case 7:
 			//Visit Type
-			document.getElementById('text598').value ="TR - AM";
+			document.getElementById('text598').value ="General - AM";
 			//Arrival Time
 			document.getElementById('text3381').value ="9:00 a.m.";
 			//activity 1 (Activity, time, location, detail)
@@ -655,7 +657,7 @@ function creatCVItinerary(x){
 
 		case 8:
 			//Visit Type
-			document.getElementById('text598').value ="T - PM";
+			document.getElementById('text598').value ="General - PM";
 			//Arrival Time
 			document.getElementById('text3381').value ="1:45 p.m.";
 			//activity 1 (Activity, time, location, detail)
@@ -766,6 +768,62 @@ function creatCVItinerary(x){
 			document.getElementById('text4559').value ="";
 			break;
 			
+			case 10:
+			//Visit Type
+			document.getElementById('text598').value ="4* - PM";
+			//Arrival Time
+			document.getElementById('text3381').value ="1:30 p.m.";
+			//activity 1 (Activity, time, location, detail)
+			document.getElementById('text3321').value ="Arrive on Campus";
+			document.getElementById('text3341').value ="1:30 p.m.";
+			document.getElementById('text4581').value ="Haaga House";
+			document.getElementById('text4541').value ="- Lobby";
+			//activity 2
+			document.getElementById('text4681').value ="Information Session";
+			document.getElementById('text4627').value ="1:45 p.m.";
+			document.getElementById('text4589').value ="Haaga House";
+			document.getElementById('text4543').value ="- Presentation Room";
+			//activity 3
+			document.getElementById('text4683').value ="Parent Mixer";
+			document.getElementById('text4629').value ="2:15 p.m.";
+			document.getElementById('text4591').value ="Haaga House";
+			document.getElementById('text4545').value ="- Presentation Room";
+			//activity 4
+			document.getElementById('text4685').value ="Specialized Visit";
+			document.getElementById('text4631').value ="2:30 p.m.";
+			document.getElementById('text4593').value ="";
+			document.getElementById('text4547').value ="";
+			//activity 5
+			document.getElementById('text4687').value ="Tour of Campus";
+			document.getElementById('text4633').value ="3:00 p.m.";
+			document.getElementById('text4595').value ="";
+			document.getElementById('text4549').value ="With Student Ambassador";
+			//activity 6
+			document.getElementById('text4689').value ="Depart from Campus";
+			document.getElementById('text4635').value ="4:30 p.m.";
+			document.getElementById('text4597').value ="";
+			document.getElementById('text4551').value ="";
+			//activity 7
+			document.getElementById('text4691').value ="";
+			document.getElementById('text4637').value ="";
+			document.getElementById('text4599').value ="";
+			document.getElementById('text4553').value ="";
+			//activity 8
+			document.getElementById('text4693').value ="";
+			document.getElementById('text4639').value ="";
+			document.getElementById('text4601').value ="";
+			document.getElementById('text4555').value ="";
+			//Activity 9
+			document.getElementById('text4695').value ="";
+			document.getElementById('text4641').value ="";
+			document.getElementById('text4603').value ="";
+			document.getElementById('text4557').value ="";
+			//activity 10
+			document.getElementById('text4697').value ="";
+			document.getElementById('text4643').value ="";
+			document.getElementById('text4605').value ="";
+			document.getElementById('text4559').value ="";
+		break;
 		
 
 		//For Events
@@ -800,7 +858,7 @@ function creatCVItinerary(x){
 			document.getElementById('text4595').value ="Dining Services";
 			document.getElementById('text4549').value ="";
 			//activity 6
-			document.getElementById('text4689').value ="Tour and Swag Session";
+			document.getElementById('text4689').value ="Tour of Campus";
 			document.getElementById('text4635').value ="1:45 p.m.";
 			document.getElementById('text4597').value ="";
 			document.getElementById('text4551').value ="With Student Ambassador";
@@ -1012,18 +1070,37 @@ function setArrivalTime(){
 		case "Summer - PM":
 			document.getElementById("text3381").value = "2:00 p.m.";
 			break;
+		//Remove in the future
 		case "MWF - NO class":
 			document.getElementById("text3381").value = "9:30 a.m.";
 			break;
+		//Remove in the future
 		case "MWF - YES class":
 			document.getElementById("text3381").value = "9:30 a.m.";
 			break;
-		case "TR - AM":
+		//Remove in the future
+			case "TR - AM":
 			document.getElementById("text3381").value = "9:00 a.m.";
 			break;
+		//Remove in the future
 		case "T - PM":
 			document.getElementById("text3381").value = "1:45 p.m.";
 			break;
+		case "4* - NO class":
+			document.getElementById("text3381").value = "9:30 a.m.";
+			break;
+		case "4* - YES class":
+			document.getElementById("text3381").value = "9:30 a.m.";
+			break;
+		case "4* - PM":
+			document.getElementById("text3381").value = "1:30 p.m.";
+			break;
+		case "General - AM":
+			document.getElementById("text3381").value = "9:00 a.m.";
+			break;
+		case "General - PM":
+			document.getElementById("text3381").value = "1:45 p.m.";
+			break;	
 		case "Group Visit - AM":
 			document.getElementById("text3381").value = "10:00 a.m.";
 			break;

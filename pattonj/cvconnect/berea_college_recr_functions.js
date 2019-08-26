@@ -11,3 +11,27 @@
 //--------------
 
 //None currently. 
+
+/* var test;
+
+const booFeelsTable = {
+  "HUNGRY": "WANTS FOOD",
+  "SAD": "CRYING",
+  "HAPPY": "LAUGHING"
+};
+ 
+
+
+
+function howIsBoo(state){
+	if (booFeelsTable[state]  !== undefined){
+  	test = booFeelsTable[state];
+  }
+  else{
+    test = "asleep";
+  }
+  console.log(test);
+}
+//var test = howIsBoo("SAD");
+
+howIsBoo("SAD"); */

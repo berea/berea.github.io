@@ -2,7 +2,7 @@
 
   "manifest_version": 2,
   "name": "Berea College Connect Autofill",
-  "version": "0.9.8.4",
+  "version": "0.9.8.6",
   "author": "Jacob Patton",
   "description": "Used for Berea College's Connect instance to populate various fields.",
   
