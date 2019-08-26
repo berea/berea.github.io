@@ -119,6 +119,13 @@ V0.9.8.4 (7/18/19)
 - fixed error when Academic Iniativeis set back to "Select one"
 - Updated Campus Visit Itinerary for Fall 2019. 
  
+V0.9.8.5 (8/23/19)
+- Updated Campus Visit Itinerary for 4* PM visit
+- Updated itinerary to use the new visit type attribute values
+- Added warning for E&E's if contact is home schooled or GED. 
+- Added name fix button. 
 
+V0.9.8.5 (8/24/19)
+- Swag Session remove from campus tour. 
 
 

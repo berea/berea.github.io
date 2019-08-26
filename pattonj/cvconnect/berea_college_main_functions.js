@@ -112,6 +112,13 @@ function viewUpdate(reloaded){
 		var oldButton = document.getElementById("bereaButton");
 		oldButton.remove();
 	}
+	
+	//Remove the BereaButton so we can recreate it if needed.
+	if (document.contains(document.getElementById('bereaNameButton'))){
+		var oldButton = document.getElementById("bereaNameButton");
+		oldButton.remove();
+	}
+	
 	//Remove plugin Status
 	if (document.contains(document.getElementById('addonWorking'))){
 		var failSafeText = document.getElementById("addonWorking");
@@ -164,6 +171,7 @@ function viewUpdate(reloaded){
 			fieldWatch ("date209Date",createProofofResidencyListener);
 			break;
 		default:
+			fieldWatch ("firstname", doNothingFunction);
 			break;
 	}
 	
@@ -183,6 +191,7 @@ function fieldWatch(myField,myFunction){
 				clearTimeout(fieldWatchTimer);
 				console.log("Watched Field Found, running " + myFunction.name);
 				myFunction();
+				fixNameButton();
 				console.log("function was run");
 				//start failSafe to see if the screen changes. 
 				failSafe();
@@ -269,6 +278,53 @@ function setViewTimer(myFunction,runOnce){
 		viewTimer = setTimeout(function(){myFunction(); setViewTimer(myFunction);
 		}, 400);
 	}
+}
+
+//Used to fix name values
+function fixNameButton(){
+	
+	if(checkViewFields(["lastname","firstname"]) && document.getElementById("saveTop").style.display !== "none" && ((currentLocation === "/admin/Contacts/Search" && document.getElementById("searchTop").style.display !== ''  ) || currentLocation === "/admin/Contacts/View" || currentLocation === "/admin/Contacts/Edit") ){
+		//Create button to copy fix name.
+		//Only one button as the viewUpdate function looks for the ID to remove it when refreshing. 
+		var bereaButton = document.createElement("div");
+		bereaButton.style = "float:right";
+		bereaButton.id = "bereaNameButton";
+		bereaButton.innerHTML = "<div class='BereaDropdown'>"+
+			"<input ID='Berea_Name_Button' value='Fix Name' class='BereaBlue bigbutton smallbutton new' type='button' onclick='return false;'>"+
+		  "</div>";
+		
+		var buttonRow = document.getElementById('lastname');
+		buttonRow.parentNode.insertBefore(bereaButton, buttonRow.nextSibling);
+		document.getElementById("Berea_Name_Button").addEventListener("click",function(){
+			document.getElementById("lastname").value = titleCase(document.getElementById("lastname").value,true);
+			document.getElementById("firstname").value = titleCase(document.getElementById("firstname").value,false);
+			});
+		
+		if(checkViewFields(["middlename"])){
+		document.getElementById("Berea_Name_Button").addEventListener("click",function(){
+			document.getElementById("middlename").value = titleCase(document.getElementById("middlename").value);
+			});
+		}	
+	}	
+	
+}
+
+function titleCase(str,lastname) {
+	if(lastname){
+		str = str.toLowerCase();
+		str = str.replace(/(?:^|\s)mc./g, function(a){return "Mc"+ a.charAt(2).toUpperCase(); });
+		return str.replace(/(?:^|\s|-|')\S/g, function(a) { return a.toUpperCase(); });
+	}
+	else{
+		str = str.toLowerCase();
+		return str.replace(/(?:^|\s|-|')\S/g, function(a) { return a.toUpperCase(); });
+	}
+
+}
+
+function doNothingFunction(){
+//simply used to do nothing
+return;
 }
 
 //--------------
