@@ -16,15 +16,11 @@ var proofOfResDate;		//What date was proof of residency recorded?
 
 //create the listeners for the text boxes
 function createEEListeners(){
-	if(checkViewFields(["text219","date6485Date","text3985","text223","date6487Date","text3987","text695","text3283","date7661Date"])){
+	if(checkViewFields(["text219","date6485Date","text3985","date6487Date","text695","text3283","date7661Date"])){
 		//set listener for name 1
 		document.getElementById("text219").addEventListener("input", function(){setEEDate("text219","date6485Date","text3985");});
 		document.getElementById("text3985").readOnly = true;
 
-		//set listener for name 2
-		document.getElementById("text223").addEventListener("input", function(){setEEDate("text223","date6487Date","text3987");});
-		document.getElementById("text3987").readOnly = true;
-		
 		//run function to verify GED & Home School Recomendations
 		modifyRecomendationRequirements();
 
@@ -52,18 +48,37 @@ function modifyRecomendationRequirements(){
 	document.getElementById("text3283").disabled = true;
 	document.getElementById("text3283").style.color = "#000000";
 	//show alert if it's either GED or Homeschool is Yes (and E&E 1 or E&E 2 are empty). 
-	document.getElementById("date7661Date").addEventListener("click",recomendationAlert);
+	//Looks for changes
+	if( document.getElementById("date7661Date").value == ""){
+		generalRecDate = document.getElementById("date7661Date").value;
+		setViewTimer(checkRecomendationDateChange); 
 	}
+	//Looks for start of action. 
+	document.getElementById("date7661Date").addEventListener("click",recomendationAlert);
+	document.getElementById("date7661Date").addEventListener("input",recomendationAlert);
+	}
+
 //show alert from modifyRecomendationRequirements function. 
 function recomendationAlert(){
-	//check to make sure EE1 or EE2 is empty and is homeschooled or GED.  
-	if((document.getElementById("text695").value =="GEDX" || document.getElementById("text3283").value=="Y")&& (document.getElementById("text219").value =="" || document.getElementById("text223").value =="") ){
-		alert("GED OR HOME SCHOOLED\n ----Core Teacher not Required--- \n\nIf recomendation form was used, please enter on right side in Recomendation 1 or 2."); 
+	//check to make sure EE1 is empty and is homeschooled or GED.  
+	if((document.getElementById("text695").value =="GEDX" || document.getElementById("text3283").value=="Y")&& (document.getElementById("text219").value =="" ) ){
+		alert("GED OR HOME SCHOOLED\n ----Core Teacher not Required--- \n\nIf recomendation form was used, please enter on right side in Recomendation 1."); 
+		//clear timers and listeners so we don't continue to show message. 
+		clearTimeout(viewTimer);
+		document.getElementById("date7661Date").removeEventListener("click",recomendationAlert);
+		document.getElementById("date7661Date").removeEventListener("input",recomendationAlert);
 	}
 	else{
 		return;
 	}
 }	
+
+// Start the timer to look for Add'l E&E or Rec date change. 
+function checkRecomendationDateChange(){
+	if(generalRecDate !== document.getElementById("date7661Date").value ){
+		recomendationAlert();
+	}
+}
 
 	
 //-----------//High School Transcript and Guidance Counselor View//-----------//
@@ -212,7 +227,6 @@ function createFeeDateListener(){
 	if(checkViewFields(["date2951Date","numeric2821"])){
 		
 		feeDate = document.getElementById("date2951Date").value;
-		console.log(feeDate);
 		//Replaced focusout or keydown with timer. 
 		setViewTimer(checkFeeDateChange); 
 	} else{

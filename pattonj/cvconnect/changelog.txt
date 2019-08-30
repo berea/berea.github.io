@@ -125,7 +125,9 @@ V0.9.8.5 (8/23/19)
 - Added warning for E&E's if contact is home schooled or GED. 
 - Added name fix button. 
 
-V0.9.8.5 (8/24/19)
+V0.9.8.6 (8/24/19)
 - Swag Session remove from campus tour. 
 
-
+V0.9.8.7 (8/24/19)
+- Removed E-E2 references. Not longer required.
+- Small tweak to how Add'l rec box is treated when looking for data entry.  
