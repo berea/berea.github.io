@@ -16,7 +16,7 @@ var proofOfResDate;		//What date was proof of residency recorded?
 
 //create the listeners for the text boxes
 function createEEListeners(){
-	if(checkViewFields(["text219","date6485Date","text3985","date6487Date","text695","text3283","date7661Date"])){
+	if(checkViewFields(["text219","date6485Date","text3985","text695","text3283","date7661Date"])){
 		//set listener for name 1
 		document.getElementById("text219").addEventListener("input", function(){setEEDate("text219","date6485Date","text3985");});
 		document.getElementById("text3985").readOnly = true;
