@@ -191,7 +191,6 @@ function fieldWatch(myField,myFunction){
 				clearTimeout(fieldWatchTimer);
 				console.log("Watched Field Found, running " + myFunction.name);
 				myFunction();
-				fixNameButton();
 				console.log("function was run");
 				//start failSafe to see if the screen changes. 
 				failSafe();
@@ -249,12 +248,15 @@ function checkViewFields(viewFields){
 		for (i = 0; i < len;i++){
 			if(document.getElementById(viewFields[i]) === null){
 				attempts++;
-				console.log("Error:failed to find field " + viewFields[i]);
+				console.log("Error:failed to find field " + viewFields[i] + "Attempt: " + attempts);
 				return false;
 			}
 		}
 		console.log("checkViewFields complete");
 		attempts = 0;
+		//It's here because I only want it to run if the other fields are found, isntead of under myFuction() in fieldWatch. 
+		//This way won't confuse the user. 
+		fixNameButton();
 		return true;
 }
 
@@ -280,10 +282,17 @@ function setViewTimer(myFunction,runOnce){
 	}
 }
 
+function doNothingFunction(){
+//Does nothing else but checks for first, middle, last name on every screen. 
+fixNameButton();
+return;
+}
+
 //Used to fix name values
 function fixNameButton(){
 	
-	if(checkViewFields(["lastname","firstname"]) && document.getElementById("saveTop").style.display !== "none" && ((currentLocation === "/admin/Contacts/Search" && document.getElementById("searchTop").style.display !== ''  ) || currentLocation === "/admin/Contacts/View" || currentLocation === "/admin/Contacts/Edit") ){
+	//Use null instead of checkViewFields as not to mess with the attempts tracker. Also, no error message this way if a name field isn't found. 
+	if(document.getElementById("lastname") !== null && document.getElementById("firstname") !== null && document.getElementById("saveTop").style.display !== "none" && ((currentLocation === "/admin/Contacts/Search" && document.getElementById("searchTop").style.display !== ''  ) || currentLocation === "/admin/Contacts/View" || currentLocation === "/admin/Contacts/Edit") ){
 		//Create button to copy fix name.
 		//Only one button as the viewUpdate function looks for the ID to remove it when refreshing. 
 		var bereaButton = document.createElement("div");
@@ -300,7 +309,7 @@ function fixNameButton(){
 			document.getElementById("firstname").value = titleCase(document.getElementById("firstname").value,false);
 			});
 		
-		if(checkViewFields(["middlename"])){
+		if(document.getElementById("middlename") !== null){
 		document.getElementById("Berea_Name_Button").addEventListener("click",function(){
 			document.getElementById("middlename").value = titleCase(document.getElementById("middlename").value);
 			});
@@ -322,10 +331,7 @@ function titleCase(str,lastname) {
 
 }
 
-function doNothingFunction(){
-//simply used to do nothing
-return;
-}
+
 
 //--------------
 //Please see seperate function files. 

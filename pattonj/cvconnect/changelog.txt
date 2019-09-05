@@ -131,3 +131,7 @@ V0.9.8.6 (8/24/19)
 V0.9.8.7 (8/24/19)
 - Removed E-E2 references. Not longer required.
 - Small tweak to how Add'l rec box is treated when looking for data entry.  
+
+V0.9.8.8 (9/4/19)
+- Missed reference to E&E2 date. 
+- Tweaked formula to fix interruption with attempt counter that shows error message. 
