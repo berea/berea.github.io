@@ -135,3 +135,6 @@ V0.9.8.7 (8/24/19)
 V0.9.8.8 (9/4/19)
 - Missed reference to E&E2 date. 
 - Tweaked formula to fix interruption with attempt counter that shows error message. 
+
+V0.9.8.9 (9/4/19)
+- Adjusted Campus Vist "Visit Type" option and udpated itinerary button. 
