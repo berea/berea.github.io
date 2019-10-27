@@ -138,3 +138,10 @@ V0.9.8.8 (9/4/19)
 
 V0.9.8.9 (9/4/19)
 - Adjusted Campus Vist "Visit Type" option and udpated itinerary button. 
+
+
+V0.9.9.0 (10/25/19)
+- Added view for Guidance Counselor Form 
+
+V0.9.9.1 (10/27/19)
+- Adjusted Guidance Counselor Form function to not show percentile in certain situations. 

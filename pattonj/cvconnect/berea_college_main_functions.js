@@ -154,6 +154,9 @@ function viewUpdate(reloaded){
 		case "HS Transcript / Counselor Evaluation Form":
 			fieldWatch("hsname",createHSTranscriptAndPercentListeners);
 			break;
+		case "Counselor Evaluation Form":
+			fieldWatch("numeric7963",createPercentListeners);
+			break;
 		case "Evaluations and Endorsements":
 			fieldWatch("text219",createEEListeners);
 			break;
