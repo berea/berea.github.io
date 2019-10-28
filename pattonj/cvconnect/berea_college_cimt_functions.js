@@ -85,23 +85,44 @@ function checkRecomendationDateChange(){
 function createHSTranscriptAndPercentListeners(){
 	if(checkViewFields(["text3703", "date7349Date","numeric273","numeric277","text3265","hsname","text1501","numeric7963","date7349Date","hscode","hsstate","text1503"])){
 
+		//GED% Field
+		document.getElementById("text3265").addEventListener("input",setGEDField);
 		//Class Rank Field
 		document.getElementById("numeric273").addEventListener("input",setClassRankPercentile);
 		//Class Size Field
 		document.getElementById("numeric277").addEventListener("input",setClassRankPercentile);
-		//GED% Field
-		document.getElementById("text3265").addEventListener("input",setGEDField);
 		//Academic Initiative
 		document.getElementById("text3703").addEventListener("input", setAcademicInitiativeDate);
 		//Adjust Adcademic Intitiave List
 		adjustAcademicInitiativeDropdown();
 		//Create button to copy HS Transcript
 		createHSTranscriptButton();
+		
 
 	} else{
 		recheckViewFields();
 	}
 }
+
+//-----------//Guidance Counselor View//-----------//
+function createPercentListeners(){
+	if(checkViewFields(["text3703", "date7349Date","numeric273","numeric277","numeric7963"])){
+
+		//Class Rank Field
+		document.getElementById("numeric273").addEventListener("input",setClassRankPercentile);
+		//Class Size Field
+		document.getElementById("numeric277").addEventListener("input",setClassRankPercentile);
+		//Academic Initiative
+		document.getElementById("text3703").addEventListener("input", setAcademicInitiativeDate);
+		//Adjust Adcademic Intitiave List
+		adjustAcademicInitiativeDropdown();
+	} else{
+		recheckViewFields();
+	}
+}
+
+
+
 
 function setAcademicInitiativeDate(){
 	var dropdownOption=document.getElementById('text3703').value;
@@ -184,8 +205,12 @@ function setClassRankPercentile(){
 	var classRank = document.getElementById("numeric273").value;
 	var classSize = document.getElementById("numeric277").value;
 
+	if(classRank !=="" && classSize !=="" && classSize < 15 && Number(classRank) <= Number(classSize) ){
+		//if class size is less than 15, we don't want to give a percentile. 
+		document.getElementById("numeric7963").value = "";
+		document.getElementById("numeric7963").style.backgroundColor = "";
 	
-	if(classRank !=="" && classSize !==""){
+	} else if(classRank !=="" && classSize !==""){
 		document.getElementById("numeric7963").value = Math.round(100*(1-(classRank/classSize)));
 		 if( Math.round(100*(1-(classRank/classSize))) < 0){
 			document.getElementById("numeric7963").style.backgroundColor = "#FFFF00";
@@ -194,13 +219,14 @@ function setClassRankPercentile(){
 		 }
 		
 		 document.getElementById("numeric277").style.backgroundColor = "";
-		//setDateField("date7349Date");
 		
 	} else if((classRank =="" && classSize !=="")||(classRank !=="" && classSize =="")){
 		document.getElementById("numeric7963").style.backgroundColor = "#FFFF00";
 		document.getElementById("numeric277").style.backgroundColor = "";
 		document.getElementById("numeric7963").value = "";
-		//clearDateField("date7349Date",false);
+		
+	} else if(classRank =="" && classSize ==""){
+		document.getElementById("numeric7963").style.backgroundColor = "";
 	}
 }
 
