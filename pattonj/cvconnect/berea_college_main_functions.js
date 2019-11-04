@@ -16,6 +16,7 @@ var failSafeTimer;		//Used to clear the timer when needed
 var failSafeTimerValue = 300;	//Used to set the time for the timer.
 var failSafeTimerNum = 0; 		//Used to keep track of the number of times. 
 var viewTimer;			//Used to replace focusout for date fields as calendar icon doesn't always work. 
+var stopViewTimer = false;		//Used to end the timerloop when needed. 
 
 
 //on load, set main listener for dropdown view.
@@ -98,7 +99,8 @@ function viewUpdate(reloaded){
 	//Make sure we clear intervals for the field if we are watching for a change.
 	clearInterval(fieldWatchTimer);
 	clearTimeout(viewTimer);
-	clearTimeout (failSafeTimer); 
+	clearTimeout (failSafeTimer);
+	stopViewTimer = false;	
 	failSafeTimerNum = 0; 
 	failSafeTimerValue = 300; 
 	
@@ -280,7 +282,7 @@ function setViewTimer(myFunction,runOnce){
 		}, 100);
 	}
 	else{
-		viewTimer = setTimeout(function(){myFunction(); setViewTimer(myFunction);
+		viewTimer = setTimeout(function(){myFunction(); if (stopViewTimer !== true){ setViewTimer(myFunction);}
 		}, 400);
 	}
 }

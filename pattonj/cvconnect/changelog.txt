@@ -145,3 +145,6 @@ V0.9.9.0 (10/25/19)
 
 V0.9.9.1 (10/27/19)
 - Adjusted Guidance Counselor Form function to not show percentile in certain situations. 
+
+V0.9.9.2 (10/30/19)
+- Fixed bug when calendar icon is used for homeschool/GED students under recomendation. 

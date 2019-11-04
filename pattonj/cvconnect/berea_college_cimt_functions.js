@@ -47,15 +47,16 @@ function modifyRecomendationRequirements(){
 	document.getElementById("text695").style.color = "#000000";
 	document.getElementById("text3283").disabled = true;
 	document.getElementById("text3283").style.color = "#000000";
-	//show alert if it's either GED or Homeschool is Yes (and E&E 1 or E&E 2 are empty). 
+	//show alert if it's either GED or Homeschool is Yes (and E&E 1 is empty). 
 	//Looks for changes
-	if( document.getElementById("date7661Date").value == ""){
+	if( document.getElementById("date6485Date").value == ""){
 		generalRecDate = document.getElementById("date7661Date").value;
+		//Looks for start of action. 
+		document.getElementById("date7661Date").addEventListener("click",recomendationAlert);
+		document.getElementById("date7661Date").addEventListener("input",recomendationAlert);
 		setViewTimer(checkRecomendationDateChange); 
 	}
-	//Looks for start of action. 
-	document.getElementById("date7661Date").addEventListener("click",recomendationAlert);
-	document.getElementById("date7661Date").addEventListener("input",recomendationAlert);
+	
 	}
 
 //show alert from modifyRecomendationRequirements function. 
@@ -64,9 +65,13 @@ function recomendationAlert(){
 	if((document.getElementById("text695").value =="GEDX" || document.getElementById("text3283").value=="Y")&& (document.getElementById("text219").value =="" ) ){
 		alert("GED OR HOME SCHOOLED\n ----Core Teacher not Required--- \n\nIf recomendation form was used, please enter on right side in Recomendation 1."); 
 		//clear timers and listeners so we don't continue to show message. 
+		stopViewTimer = true;
 		clearTimeout(viewTimer);
 		document.getElementById("date7661Date").removeEventListener("click",recomendationAlert);
 		document.getElementById("date7661Date").removeEventListener("input",recomendationAlert);
+		
+		
+		
 	}
 	else{
 		return;
