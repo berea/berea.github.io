@@ -126,9 +126,6 @@ function createPercentListeners(){
 	}
 }
 
-
-
-
 function setAcademicInitiativeDate(){
 	var dropdownOption=document.getElementById('text3703').value;
 	if (dropdownOption == ""){
@@ -137,7 +134,6 @@ function setAcademicInitiativeDate(){
 		setDateField("date7349Date");
 	}
 }
-
 
 function adjustAcademicInitiativeDropdown(){
 	//Get the visit type dropdown.
@@ -182,7 +178,6 @@ function adjustAcademicInitiativeDropdown(){
 
 
 }
-
 
 function createHSTranscriptButton(){
 
@@ -252,6 +247,7 @@ function setGEDField(){
 
 }
 
+
 //-----------//Dec of Intent / Ent Fee / Non-Enrolling View//-----------//
 function createFeeDateListener(){
 
@@ -264,7 +260,6 @@ function createFeeDateListener(){
 		recheckViewFields();
 	}
 }
-
 
 //Set fee amount, or clear the amount if the date is removed.
 function checkFeeDateChange(){
@@ -300,19 +295,50 @@ function setIntlAppProcDate(){
 	}
 }
 
-//-----------//Fall Checklist - New View//-----------//
 //-----------//Fall Checklist - Transfer View//-----------//
+// createFallChecklistTransferListener
+function createFallChecklistTransferListener(){
+	if(checkViewFields(["date209Date","text7923","text6133","text6131","text6129","text6127","text1525","date2925Date"])){
+		fallChecklistProofOfResidencyListener();
+		if(!(document.getElementById("date2925Date").value == "")){
+			var	collegeSemesterHours = ["text6133","text6131","text6129","text6127"];
+			var totalSemesterHours = 0;
+				
+			for (var i = 0; i < collegeSemesterHours.length; i++){
+				if( !isNaN(document.getElementById(collegeSemesterHours[i]).value)){
+				totalSemesterHours = totalSemesterHours + Number(document.getElementById(collegeSemesterHours[i]).value);
+				}
+			}
+
+			if (totalSemesterHours >= 36) {
+				document.getElementById("text1525").value = "W";
+			}
+		}
+	}
+}
+
+//after loading, check that semseter hours are a number
+//If they are, add them together, otherwise, show alert with "invalid input". 
+// If they are >= 36, then set test score as waived automatically. 
+
+
+//-----------//Fall Checklist - New View//-----------//
 function createFallChecklistNewListener(){
-if(checkViewFields(["date209Date","text7923"])){
-		proofOfResDate = document.getElementById("date209Date").value;
-		document.getElementById("date209Date").readOnly = true;
-		setViewTimer(fallChecklistProofOfResidencyAlert);
-		document.getElementById("date209Date").addEventListener("click",function(){document.activeElement.blur();fallChecklistProofOfResidencyAlert(true);});
-		document.getElementById("date209Date").addEventListener("keydown",function(e){if( e.which == 9 ) {return;}document.activeElement.blur();fallChecklistProofOfResidencyAlert(true);});
+	if(checkViewFields(["date209Date","text7923"])){
+		fallChecklistProofOfResidencyListener();
+		// if value hours 1 is a numb, 
 	} else{
 		recheckViewFields();
 	}
 
+}
+
+function fallChecklistProofOfResidencyListener(){
+	proofOfResDate = document.getElementById("date209Date").value;
+	document.getElementById("date209Date").readOnly = true;
+	setViewTimer(fallChecklistProofOfResidencyAlert);
+	document.getElementById("date209Date").addEventListener("click",function(){document.activeElement.blur();fallChecklistProofOfResidencyAlert(true);});
+	document.getElementById("date209Date").addEventListener("keydown",function(e){if( e.which == 9 ) {return;}document.activeElement.blur();fallChecklistProofOfResidencyAlert(true);});
 }
 
 function fallChecklistProofOfResidencyAlert(alertOnly){
