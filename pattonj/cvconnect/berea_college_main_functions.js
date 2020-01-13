@@ -169,8 +169,10 @@ function viewUpdate(reloaded){
 			fieldWatch ("text2961",createInternationalAppListener);
 			break;
 		case "Fall Checklist - New":
-		case "Fall Checklist - Transfer":
 			fieldWatch ("date209Date",createFallChecklistNewListener);
+			break;
+		case "Fall Checklist - Transfer":
+			fieldWatch ("date209Date",createFallChecklistTransferListener);
 			break;
 		case "Proof Of Residency":
 			fieldWatch ("date209Date",createProofofResidencyListener);
@@ -335,7 +337,6 @@ function titleCase(str,lastname) {
 	}
 
 }
-
 
 
 //--------------
