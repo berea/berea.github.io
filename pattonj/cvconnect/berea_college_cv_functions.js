@@ -122,23 +122,24 @@ function createCVItineraryButton() {
 	bereaButton.innerHTML = "<div class='BereaDropdown'>"+
 		"<input ID='Berea_Menu_Button' value='Berea Visits' class='BereaBlue bigbutton new' type='button' onclick='return false;'>"+
 		"<div id='BereaMenu' class='BereaDropdown-content'>"+
-					"<a href='#' ID='4star_Yes_Class' onclick='return false;'>4* - YES Class</a>"+
+					"<!--<a href='#' ID='4star_Yes_Class' onclick='return false;'>4* - YES Class</a>"+
 					"<a href='#' ID='4star_No_Class' onclick='return false;'>4* - NO Class</a>"+	
 					"<a href='#' ID='4star_PM' onclick='return false;'>Special 4* PM</a>"+	
 					"<a href='#' ID='General_AM' onclick='return false;'>General - AM</a>"+
 					"<a href='#' ID='General_PM' onclick='return false;'>General - PM</a>"+
 							
-		/* "<a href='#' class='showSubmenu' onclick='return false;'>EXAMPLE<span style='float:right;'>&#x25B8; </span></a>"+
+		"<a href='#' class='showSubmenu' onclick='return false;'>Summer<span style='float:right;'>&#x25B8; </span></a>"+
 			"<div class='BereaSubmenu' style='position: relative; width: 0; height: 0'>"+
 				"<div>"+
 						"<a href='#' ID='Summer_AM' onclick='return false;'>Summer AM</a>"+
+						"<a href='#' ID='Summer_PM' onclick='return false;'>Summer PM</a>"+
 					"</div>"+
 			"</div>"+ 
-		"<hr>"+ */
+		"<hr>"+ 
 		
 		"<a href='#' ID='Group_AM' onclick='return false;'>Group AM</a>"+
 				
-		"<hr>"+
+		"<hr>-->"+
 		"<a href='#' ID='Clear_Session'onclick='return false;' >Clear Sessions</a>"+
 	  "</div></div>";
 
@@ -299,12 +300,12 @@ function creatCVItinerary(x){
 			document.getElementById('text4551').value ="- Mountaineer Dining Hall";
 			//activity 7
 			document.getElementById('text4691').value ="Specialized Activity";
-			document.getElementById('text4637').value ="1:15 p.m.";
+			document.getElementById('text4637').value ="1:30 p.m.";
 			document.getElementById('text4599').value ="";
 			document.getElementById('text4553').value ="";
 			//activity 8
 			document.getElementById('text4693').value ="Conclusion of Visit";
-			document.getElementById('text4639').value ="2:30 p.m.";
+			document.getElementById('text4639').value ="2:00 p.m.";
 			document.getElementById('text4601').value ="";
 			document.getElementById('text4555').value ="";
 			//Activity 9
@@ -356,7 +357,7 @@ function creatCVItinerary(x){
 			document.getElementById('text4551').value ="- Mountaineer Dining Hall";
 			//activity 7
 			document.getElementById('text4691').value ="Specialized Activity";
-			document.getElementById('text4637').value ="1:15 p.m.";
+			document.getElementById('text4637').value ="1:30 p.m.";
 			document.getElementById('text4599').value ="";
 			document.getElementById('text4553').value ="";
 			//activity 8
@@ -790,10 +791,10 @@ function checkCVResDateChange(){
 function setArrivalTime(){
 	switch (document.getElementById("text598").value){
 		case "Summer - AM":
-			document.getElementById("text3381").value = "9:30 a.m.";
+			document.getElementById("text3381").value = "9:45 a.m.";
 			break;
 		case "Summer - PM":
-			document.getElementById("text3381").value = "2:00 p.m.";
+			document.getElementById("text3381").value = "1:45 p.m.";
 			break;
 		//Remove in the future
 		case "MWF - NO class":
