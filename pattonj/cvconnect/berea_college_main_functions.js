@@ -3,8 +3,9 @@
 //Used for Berea College Hobsons Connect to populate various fields
 //Created by Jacob Patton (C) 2017,2018
 //----------------------------------------------
-
+autoUpdateRowCount();
 setListener();
+
 
 //variables
 var currentLocation;	//What's my URL?
@@ -338,6 +339,22 @@ function titleCase(str,lastname) {
 
 }
 
+
+function autoUpdateRowCount(){
+	currentLocation = window.location.pathname;
+	
+	if(currentLocation === "/admin/TeleCenter/CallJobsNew.aspx" || "/admin/Telecenter/CallJobsNew.aspx"){
+		
+		if(checkViewFields(["ctl00_ContentPlaceHolder1_ucSelector_txtRowsPerRage","ctl00_ContentPlaceHolder1_ucSelector_btngo"])){
+			if(document.getElementById('ctl00_ContentPlaceHolder1_ucSelector_txtRowsPerRage').value !=="5000"){
+			document.getElementById('ctl00_ContentPlaceHolder1_ucSelector_txtRowsPerRage').value ="5000"
+			document.getElementById('ctl00_ContentPlaceHolder1_ucSelector_btngo').click();
+			}
+		}
+		
+	}
+	
+}
 
 //--------------
 //Please see seperate function files. 
