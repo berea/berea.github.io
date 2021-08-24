@@ -170,5 +170,6 @@ V0.9.9.8 (7/30/2021)
 - Update itineraries for Campus Visits. 
 
 
-
+V0.9.9.9 (7/30/2021)
+- Added itinerary for Campus Visits. 
 

@@ -135,6 +135,7 @@ function createCVItineraryButton() {
 					"<a href='#' ID='General_PM' onclick='return false;'>1-3* PM</a>"+
 					"<a href='#' ID='Early_Bird' onclick='return false;'>Early Bird</a>"+
 					"<a href='#' ID='TT_Friday' onclick='return false;'>Third Tour Friday</a>"+
+					"<a href='#' ID='Twilight' onclick='return false;'>Twilight Tour</a>"+
 							
 		"<a href='#' class='showSubmenu' onclick='return false;'>Group<span style='float:right;'>&#x25B8; </span></a>"+
 			"<div class='BereaSubmenu' style='position: relative; width: 0; height: 0'>"+
@@ -170,6 +171,7 @@ function createCVItineraryButton() {
 	document.getElementById("Group_PM").addEventListener("click",function(){creatCVItinerary(8);});
 	document.getElementById("4star_AM_Meet").addEventListener("click",function(){creatCVItinerary(9);});
 	document.getElementById("4star_PM_Meet").addEventListener("click",function(){creatCVItinerary(10);});
+	document.getElementById("Twilight").addEventListener("click",function(){creatCVItinerary(11);});
 	document.getElementById("Clear_Session").addEventListener("click",clearCVItinerary);
 	adjustVisitTypeDropdown();
 
@@ -840,6 +842,63 @@ function creatCVItinerary(x){
 			document.getElementById('text4559').value ="";
 		break;
 		
+		case 11:
+			//Visit Type
+			document.getElementById('text598').value ="Twilight Tour";
+			//Arrival Time
+			document.getElementById('text3381').value ="5:00 p.m.";
+			//activity 1 (Activity, time, location, detail)
+			document.getElementById('text3321').value ="Arrive on Campus";
+			document.getElementById('text3341').value ="5:00 p.m.";
+			document.getElementById('text4581').value ="Haaga House";
+			document.getElementById('text4541').value ="- Lobby";
+			//activity 2
+			document.getElementById('text4681').value ="Information Session";
+			document.getElementById('text4627').value ="5:15 p.m.";
+			document.getElementById('text4589').value ="Haaga House";
+			document.getElementById('text4543').value ="- Presentation Room";
+			//activity 3
+			document.getElementById('text4683').value ="Tour of Campus";
+			document.getElementById('text4629').value ="5:45 p.m.";
+			document.getElementById('text4591').value ="";
+			document.getElementById('text4545').value ="- with Student Ambassador";
+			//activity 4
+			document.getElementById('text4685').value ="Depart from Campus";
+			document.getElementById('text4631').value ="7:00 p.m.";
+			document.getElementById('text4593').value ="";
+			document.getElementById('text4547').value ="";
+			//activity 5
+			document.getElementById('text4687').value ="";
+			document.getElementById('text4633').value ="";
+			document.getElementById('text4595').value ="";
+			document.getElementById('text4549').value ="";
+			//activity 6
+			document.getElementById('text4689').value ="";
+			document.getElementById('text4635').value ="";
+			document.getElementById('text4597').value ="";
+			document.getElementById('text4551').value ="";
+			//activity 7
+			document.getElementById('text4691').value ="";
+			document.getElementById('text4637').value ="";
+			document.getElementById('text4599').value ="";
+			document.getElementById('text4553').value ="";
+			//activity 8
+			document.getElementById('text4693').value ="";
+			document.getElementById('text4639').value ="";
+			document.getElementById('text4601').value ="";
+			document.getElementById('text4555').value ="";
+			//Activity 9
+			document.getElementById('text4695').value ="";
+			document.getElementById('text4641').value ="";
+			document.getElementById('text4603').value ="";
+			document.getElementById('text4557').value ="";
+			//activity 10
+			document.getElementById('text4697').value ="";
+			document.getElementById('text4643').value ="";
+			document.getElementById('text4605').value ="";
+			document.getElementById('text4559').value ="";
+		break;	
+		
 		default:
 			//do nothing
 			break;
@@ -1049,6 +1108,9 @@ function setArrivalTime(){
 			break;
 		case "Third Tour Friday":
 			document.getElementById("text3381").value = "3:00 p.m.";
+			break;
+		case "Twilight Tour":
+			document.getElementById("text3381").value = "5:00 p.m.";
 			break;
 		case "": //If they return to "select one", which is really blank.
 			document.getElementById("text3381").value = "";
