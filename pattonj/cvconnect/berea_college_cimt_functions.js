@@ -381,7 +381,7 @@ function proofOfResidencyAlert(){
 		alert("DACA APPLICANT\n \nPlease confirm that:\n\n The Category is C33 \n The expiration date is after the fall start date\n");
 	}else if(document.getElementById("text7923").value !== "" && document.getElementById("date209Date").value !==""){
 		proofOfResDate = document.getElementById("date209Date").value;
-		alert("Please confirm that:\n\n The expiration date is after 8/15/2020 \n");
+		alert("Please confirm that:\n\n The expiration date is after the fall start date\n");
 	}else if (document.getElementById("text7923").value == "" && document.getElementById("date209Date").value !==""){
 		document.getElementById("date209Date").value = "";
 		alert("Please select immigrant status type first.");
