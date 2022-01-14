@@ -122,29 +122,58 @@ function createCVItineraryButton() {
 	bereaButton.innerHTML = "<div class='BereaDropdown'>"+
 		"<input ID='Berea_Menu_Button' value='Berea Visits' class='BereaBlue bigbutton new' type='button' onclick='return false;'>"+
 		"<div id='BereaMenu' class='BereaDropdown-content'>"+
-		"<a href='#' class='showSubmenu' onclick='return false;'>4*<span style='float:right;'>&#x25B8; </span></a>"+
+		"<a href='#' class='showSubmenu' onclick='return false;'>Monday<span style='float:right;'>&#x25B8; </span></a>"+
 			"<div class='BereaSubmenu' style='position: relative; width: 0; height: 0'>"+
 				"<div>"+
-					"<a href='#' ID='4star_AM' onclick='return false;'>4* AM</a>"+	
-					"<a href='#' ID='4star_PM' onclick='return false;'>4* PM</a>"+	
-					"<a href='#' ID='4star_AM_Meet' onclick='return false;'>4* AM with Meet</a>"+	
-					"<a href='#' ID='4star_PM_Meet' onclick='return false;'>4* PM with Meet</a>"+	
+					"<a href='#' ID='4star_AM_Monday' onclick='return false;'>4* AM Moday</a>"+	
+					"<a href='#' ID='4star_PM_Mon' onclick='return false;'>4* PM</a>"+	
+					"<a href='#' ID='4star_PM_Meet_Mon' onclick='return false;'>4* PM with Meet</a>"+	
+					"<a href='#' ID='General_AM_Mon' onclick='return false;'>1-3* AM</a>"+
+					"<a href='#' ID='General_PM_Mon' onclick='return false;'>1-3* PM</a>"+
 				"</div>"+
 			"</div>"+ 
-					"<a href='#' ID='General_AM' onclick='return false;'>1-3* AM</a>"+
-					"<a href='#' ID='General_PM' onclick='return false;'>1-3* PM</a>"+
-					"<a href='#' ID='Early_Bird' onclick='return false;'>Early Bird</a>"+
-					"<a href='#' ID='TT_Friday' onclick='return false;'>Third Tour Friday</a>"+
-					"<a href='#' ID='Twilight' onclick='return false;'>Twilight Tour</a>"+
-							
-		"<a href='#' class='showSubmenu' onclick='return false;'>Group<span style='float:right;'>&#x25B8; </span></a>"+
+			"<a href='#' class='showSubmenu' onclick='return false;'>Tuesday<span style='float:right;'>&#x25B8; </span></a>"+
+			"<div class='BereaSubmenu' style='position: relative; width: 0; height: 0'>"+
+				"<div>"+
+					"<a href='#' ID='4star_AM_Tus' onclick='return false;'>4* AM</a>"+	
+					"<a href='#' ID='4star_AM_Meet_Tues' onclick='return false;'>4* AM with Meet</a>"+	
+					"<a href='#' ID='4star_PM_Tuesday' onclick='return false;'>4* PM Tuesday</a>"+	
+					"<a href='#' ID='4star_PM_Meet_Tuesday' onclick='return false;'>4* PM Tuesday with Meet </a>"+	
+					"<a href='#' ID='General_AM_Tus' onclick='return false;'>1-3* AM</a>"+
+					"<a href='#' ID='General_PM_Tuesday' onclick='return false;'>1-3* PM Tuesday</a>"+
+				"</div>"+
+			"</div>"+ 
+			"<a href='#' class='showSubmenu' onclick='return false;'>Wednesday<span style='float:right;'>&#x25B8; </span></a>"+
+			"<div class='BereaSubmenu' style='position: relative; width: 0; height: 0'>"+
+				"<div>"+
+					"<a href='#' ID='4star_AM_Wen' onclick='return false;'>4* AM</a>"+	
+					"<a href='#' ID='4star_AM_Meet_Wen' onclick='return false;'>4* AM with Meet</a>"+	
+					"<a href='#' ID='4star_PM_Wen' onclick='return false;'>4* PM</a>"+	
+					"<a href='#' ID='4star_PM_Meet_Wen' onclick='return false;'>4* PM with Meet</a>"+	
+					"<a href='#' ID='General_AM_Wen' onclick='return false;'>1-3* AM</a>"+
+					"<a href='#' ID='General_PM_Wen' onclick='return false;'>1-3* PM</a>"+
+				"</div>"+
+			"</div>"+ 
+			"<a href='#' class='showSubmenu' onclick='return false;'>Thursday<span style='float:right;'>&#x25B8; </span></a>"+
 			"<div class='BereaSubmenu' style='position: relative; width: 0; height: 0'>"+
 				"<div>"+
 					"<a href='#' ID='Group_AM' onclick='return false;'>Group AM</a>"+
-					"<a href='#' ID='Group_PM' onclick='return false;'>Group PM</a>"+
+					"<a href='#' ID='Junior_PM' onclick='return false;'>Junior PM Thursday</a>"+	
 				"</div>"+
 			"</div>"+ 
-				
+			"<a href='#' class='showSubmenu' onclick='return false;'>Friday<span style='float:right;'>&#x25B8; </span></a>"+
+			"<div class='BereaSubmenu' style='position: relative; width: 0; height: 0'>"+
+				"<div>"+
+					"<a href='#' ID='4star_AM_Fri' onclick='return false;'>4* AM</a>"+	
+					"<a href='#' ID='4star_AM_Meet_Fri' onclick='return false;'>4* AM with Meet</a>"+	
+					"<a href='#' ID='4star_PM_Fri' onclick='return false;'>4* PM</a>"+	
+					"<a href='#' ID='4star_PM_Meet_Fri' onclick='return false;'>4* PM with Meet</a>"+	
+					"<a href='#' ID='General_AM_Fri' onclick='return false;'>1-3* AM</a>"+
+					"<a href='#' ID='General_PM_Fri' onclick='return false;'>1-3* PM</a>"+
+					"<a href='#' ID='TT_Friday' onclick='return false;'>Third Tour Friday</a>"+
+					
+				"</div>"+
+			"</div>"+ 				
 		"<hr>"+
 		"<a href='#' ID='Clear_Session'onclick='return false;' >Clear Sessions</a>"+
 	  "</div></div>";
@@ -161,17 +190,32 @@ function createCVItineraryButton() {
 	for (var i = 0; i < submenus.length; i++) {
 		submenus[i].addEventListener("click",function(event){toggleCVSubmenu(event);});
 	}
-	document.getElementById("4star_AM").addEventListener("click",function(){creatCVItinerary(1);});
-	document.getElementById("4star_PM").addEventListener("click",function(){creatCVItinerary(2);});
-	document.getElementById("General_AM").addEventListener("click",function(){creatCVItinerary(3);});
-	document.getElementById("General_PM").addEventListener("click",function(){creatCVItinerary(4);});
-	document.getElementById("Early_Bird").addEventListener("click",function(){creatCVItinerary(5);});
+	document.getElementById("4star_AM_Tus").addEventListener("click",function(){creatCVItinerary(1);});
+	document.getElementById("4star_AM_Wen").addEventListener("click",function(){creatCVItinerary(1);});
+	document.getElementById("4star_AM_Fri").addEventListener("click",function(){creatCVItinerary(1);});	
+	document.getElementById("4star_PM_Mon").addEventListener("click",function(){creatCVItinerary(2);});
+	document.getElementById("4star_PM_Wen").addEventListener("click",function(){creatCVItinerary(2);});
+	document.getElementById("4star_PM_Fri").addEventListener("click",function(){creatCVItinerary(2);});
+	document.getElementById("General_AM_Mon").addEventListener("click",function(){creatCVItinerary(3);});
+	document.getElementById("General_AM_Tus").addEventListener("click",function(){creatCVItinerary(3);});
+	document.getElementById("General_AM_Wen").addEventListener("click",function(){creatCVItinerary(3);});
+	document.getElementById("General_AM_Fri").addEventListener("click",function(){creatCVItinerary(3);});
+	document.getElementById("General_PM_Mon").addEventListener("click",function(){creatCVItinerary(4);});
+	document.getElementById("General_PM_Wen").addEventListener("click",function(){creatCVItinerary(4);});
+	document.getElementById("General_PM_Fri").addEventListener("click",function(){creatCVItinerary(4);});
+	document.getElementById("Junior_PM").addEventListener("click",function(){creatCVItinerary(5);});
 	document.getElementById("TT_Friday").addEventListener("click",function(){creatCVItinerary(6);});
 	document.getElementById("Group_AM").addEventListener("click",function(){creatCVItinerary(7);});
-	document.getElementById("Group_PM").addEventListener("click",function(){creatCVItinerary(8);});
-	document.getElementById("4star_AM_Meet").addEventListener("click",function(){creatCVItinerary(9);});
-	document.getElementById("4star_PM_Meet").addEventListener("click",function(){creatCVItinerary(10);});
-	document.getElementById("Twilight").addEventListener("click",function(){creatCVItinerary(11);});
+	document.getElementById("General_PM_Tuesday").addEventListener("click",function(){creatCVItinerary(8);});
+	document.getElementById("4star_AM_Meet_Tues").addEventListener("click",function(){creatCVItinerary(9);});
+	document.getElementById("4star_AM_Meet_Wen").addEventListener("click",function(){creatCVItinerary(9);});
+	document.getElementById("4star_AM_Meet_Fri").addEventListener("click",function(){creatCVItinerary(9);});
+	document.getElementById("4star_PM_Meet_Mon").addEventListener("click",function(){creatCVItinerary(10);});
+	document.getElementById("4star_PM_Meet_Wen").addEventListener("click",function(){creatCVItinerary(10);});
+	document.getElementById("4star_PM_Meet_Fri").addEventListener("click",function(){creatCVItinerary(10);});
+	document.getElementById("4star_AM_Monday").addEventListener("click",function(){creatCVItinerary(11);});
+	document.getElementById("4star_PM_Tuesday").addEventListener("click",function(){creatCVItinerary(12);});
+	document.getElementById("4star_PM_Meet_Tuesday").addEventListener("click",function(){creatCVItinerary(13);});
 	document.getElementById("Clear_Session").addEventListener("click",clearCVItinerary);
 	adjustVisitTypeDropdown();
 
@@ -237,16 +281,11 @@ function showCVItineraryMenu() {
 					  if (openDropdown.classList.contains('show')) {
 						openDropdown.classList.remove('show');
 					  }
-					}
-					
+					}	
 				} else{
 					return ;
 				}
 			};
-
-
-
-
 }
 
 //Creates the itinerary and fills in the fields
@@ -500,27 +539,27 @@ function creatCVItinerary(x){
 
 		case 5:
 			//Visit Type
-			document.getElementById('text598').value ="Early Bird";
+			document.getElementById('text598').value ="Junior - PM";
 			//Arrival Time
-			document.getElementById('text3381').value ="7:45 a.m.";
+			document.getElementById('text3381').value ="1:00 p.m.";
 			//activity 1 (Activity, time, location, detail)
 			document.getElementById('text3321').value ="Arrive on Campus";
-			document.getElementById('text3341').value ="7:45 a.m.";
+			document.getElementById('text3341').value ="1:00 p.m.";
 			document.getElementById('text4581').value ="Haaga House";
 			document.getElementById('text4541').value ="- Lobby";
 			//activity 2
 			document.getElementById('text4681').value ="Information Session";
-			document.getElementById('text4627').value ="8:00 a.m.";
+			document.getElementById('text4627').value ="1:10 p.m.";
 			document.getElementById('text4589').value ="Haaga House";
 			document.getElementById('text4543').value ="- Presentation Room";
 			//activity 3
 			document.getElementById('text4683').value ="Tour of Campus";
-			document.getElementById('text4629').value ="8:30 a.m.";
+			document.getElementById('text4629').value ="1:35 p.m.";
 			document.getElementById('text4591').value ="";
 			document.getElementById('text4545').value ="- with Student Ambassador";
 			//activity 4
 			document.getElementById('text4685').value ="Depart from Campus";
-			document.getElementById('text4631').value ="10:00 a.m.";
+			document.getElementById('text4631').value ="2:30 p.m.";
 			document.getElementById('text4593').value ="";
 			document.getElementById('text4547').value ="";
 			//activity 5
@@ -616,25 +655,25 @@ function creatCVItinerary(x){
 			//Visit Type
 			document.getElementById('text598').value ="Group Visit - AM";
 			//Arrival Time
-			document.getElementById('text3381').value ="9:45 a.m.";
+			document.getElementById('text3381').value ="9:00 a.m.";
 			//activity 1 (Activity, time, location, detail)
 			document.getElementById('text3321').value ="Arrive on Campus";
-			document.getElementById('text3341').value ="9:45 a.m.";
+			document.getElementById('text3341').value ="9:00 a.m.";
 			document.getElementById('text4581').value ="Haaga House";
 			document.getElementById('text4541').value ="- Lobby";
 			//activity 2
 			document.getElementById('text4681').value ="Information Session";
-			document.getElementById('text4627').value ="10:00 a.m.";
+			document.getElementById('text4627').value ="9:15 a.m.";
 			document.getElementById('text4589').value ="Haaga House";
 			document.getElementById('text4543').value ="- Presentation Room";
 			//activity 3
 			document.getElementById('text4683').value ="Tour of Campus";
-			document.getElementById('text4629').value ="10:30 a.m.";
+			document.getElementById('text4629').value ="9:45 a.m.";
 			document.getElementById('text4591').value ="";
 			document.getElementById('text4545').value ="- with Student Ambassador";
 			//activity 4
 			document.getElementById('text4685').value ="Depart from Campus";
-			document.getElementById('text4631').value ="12:00 p.m.";
+			document.getElementById('text4631').value ="10:50 a.m.";
 			document.getElementById('text4593').value ="";
 			document.getElementById('text4547').value ="";
 			//activity 5
@@ -671,27 +710,27 @@ function creatCVItinerary(x){
 		
 		case 8:
 			//Visit Type
-			document.getElementById('text598').value ="Group Visit - PM";
+			document.getElementById('text598').value ="General - PM";
 			//Arrival Time
-			document.getElementById('text3381').value ="2:15 p.m.";
+			document.getElementById('text3381').value ="1:00 p.m.";
 			//activity 1 (Activity, time, location, detail)
 			document.getElementById('text3321').value ="Arrive on Campus";
-			document.getElementById('text3341').value ="2:15 p.m.";
+			document.getElementById('text3341').value ="1:00 p.m.";
 			document.getElementById('text4581').value ="Haaga House";
 			document.getElementById('text4541').value ="- Lobby";
 			//activity 2
 			document.getElementById('text4681').value ="Information Session";
-			document.getElementById('text4627').value ="2:30 p.m.";
+			document.getElementById('text4627').value ="1:10 p.m.";
 			document.getElementById('text4589').value ="Haaga House";
 			document.getElementById('text4543').value ="- Presentation Room";
 			//activity 3
 			document.getElementById('text4683').value ="Tour of Campus";
-			document.getElementById('text4629').value ="3:00 p.m.";
+			document.getElementById('text4629').value ="1:30 p.m.";
 			document.getElementById('text4591').value ="";
 			document.getElementById('text4545').value ="- with Student Ambassador";
 			//activity 4
 			document.getElementById('text4685').value ="Depart from Campus";
-			document.getElementById('text4631').value ="4:30 p.m.";
+			document.getElementById('text4631').value ="3:00 p.m.";
 			document.getElementById('text4593').value ="";
 			document.getElementById('text4547').value ="";
 			//activity 5
@@ -730,47 +769,45 @@ function creatCVItinerary(x){
 			//Visit Type
 			document.getElementById('text598').value ="4* - AM";
 			//Arrival Time
-			document.getElementById('text3381').value ="8:30 a.m.";
-			//Arrival Time
-			document.getElementById('text3381').value ="8:30 a.m.";
+			document.getElementById('text3381').value ="9:00 a.m.";
 			//activity 1 (Activity, time, location, detail)
 			document.getElementById('text3321').value ="Arrive on Campus";
-			document.getElementById('text3341').value ="8:30 a.m.";
+			document.getElementById('text3341').value ="9:00 a.m.";
 			document.getElementById('text4581').value ="Haaga House";
 			document.getElementById('text4541').value ="- Lobby";
 			//activity 2
 			document.getElementById('text4681').value ="Optional Meeting";
-			document.getElementById('text4627').value ="8:35 a.m.";
+			document.getElementById('text4627').value ="9:05 a.m.";
 			document.getElementById('text4589').value ="";
 			document.getElementById('text4543').value ="- with";
 			//activity 3
-			document.getElementById('text4683').value ="Return to Admissions Office";
-			document.getElementById('text4629').value ="9:15 a.m.";
+			document.getElementById('text4683').value ="Information Session";
+			document.getElementById('text4629').value ="9:40 a.m.";
 			document.getElementById('text4591').value ="Haaga House";
-			document.getElementById('text4545').value ="- Lobby";
+			document.getElementById('text4545').value ="- Presentation Room";
 			//activity 4
-			document.getElementById('text4685').value ="Information Session";
-			document.getElementById('text4631').value ="9:40 a.m.";
+			document.getElementById('text4685').value ="Family FAQ Session";
+			document.getElementById('text4631').value ="10:00 a.m.";
 			document.getElementById('text4593').value ="Haaga House"
 			document.getElementById('text4547').value ="- Presentation Room";
 			//activity 5
-			document.getElementById('text4687').value ="Family FAQ Session";
+			document.getElementById('text4687').value ="Student Panel";
 			document.getElementById('text4633').value ="10:00 a.m.";
 			document.getElementById('text4595').value ="Haaga House";
-			document.getElementById('text4549').value ="- Presentation Room";
+			document.getElementById('text4549').value ="- Lobby";
 			//activity 6
-			document.getElementById('text4689').value ="Student Panel";
-			document.getElementById('text4635').value ="10:00 a.m.";
-			document.getElementById('text4597').value ="Haaga House";
-			document.getElementById('text4551').value ="- Lobby";
+			document.getElementById('text4689').value ="Tour of Campus";
+			document.getElementById('text4635').value ="10:30 a.m.";
+			document.getElementById('text4597').value ="";
+			document.getElementById('text4551').value ="- with Student Ambassador";
 			//activity 7
-			document.getElementById('text4691').value ="Tour of Campus";
-			document.getElementById('text4637').value ="10:30 a.m.";
+			document.getElementById('text4691').value ="Depart from Campus";
+			document.getElementById('text4637').value ="12:00 p.m.";
 			document.getElementById('text4599').value ="";
-			document.getElementById('text4553').value ="- with Student Ambassador";
+			document.getElementById('text4553').value ="";
 			//activity 8
-			document.getElementById('text4693').value ="Depart from Campus";
-			document.getElementById('text4639').value ="12:00 p.m.";
+			document.getElementById('text4693').value ="";
+			document.getElementById('text4639').value ="";
 			document.getElementById('text4601').value ="";
 			document.getElementById('text4555').value ="";
 			//Activity 9
@@ -844,42 +881,156 @@ function creatCVItinerary(x){
 		
 		case 11:
 			//Visit Type
-			document.getElementById('text598').value ="Twilight Tour";
+			document.getElementById('text598').value ="4* - AM";
 			//Arrival Time
-			document.getElementById('text3381').value ="5:00 p.m.";
+			document.getElementById('text3381').value ="8:15 a.m.";
 			//activity 1 (Activity, time, location, detail)
 			document.getElementById('text3321').value ="Arrive on Campus";
-			document.getElementById('text3341').value ="5:00 p.m.";
+			document.getElementById('text3341').value ="8:15 a.m.";
 			document.getElementById('text4581').value ="Haaga House";
 			document.getElementById('text4541').value ="- Lobby";
 			//activity 2
 			document.getElementById('text4681').value ="Information Session";
-			document.getElementById('text4627').value ="5:15 p.m.";
+			document.getElementById('text4627').value ="8:20 a.m.";
 			document.getElementById('text4589').value ="Haaga House";
 			document.getElementById('text4543').value ="- Presentation Room";
 			//activity 3
-			document.getElementById('text4683').value ="Tour of Campus";
-			document.getElementById('text4629').value ="5:45 p.m.";
-			document.getElementById('text4591').value ="";
-			document.getElementById('text4545').value ="- with Student Ambassador";
+			document.getElementById('text4683').value ="Family FAQ Session";
+			document.getElementById('text4629').value ="8:40 a.m.";
+			document.getElementById('text4591').value ="Haaga House";
+			document.getElementById('text4545').value ="- Presentation Room";
 			//activity 4
-			document.getElementById('text4685').value ="Depart from Campus";
-			document.getElementById('text4631').value ="7:00 p.m.";
-			document.getElementById('text4593').value ="";
-			document.getElementById('text4547').value ="";
+			document.getElementById('text4685').value ="Student Panel";
+			document.getElementById('text4631').value ="8:40 a.m.";
+			document.getElementById('text4593').value ="Haaga House";
+			document.getElementById('text4547').value ="- Lobby";
 			//activity 5
-			document.getElementById('text4687').value ="";
-			document.getElementById('text4633').value ="";
+			document.getElementById('text4687').value ="Tour of Campus";
+			document.getElementById('text4633').value ="9:10 a.m.";
 			document.getElementById('text4595').value ="";
-			document.getElementById('text4549').value ="";
+			document.getElementById('text4549').value ="- with Student Ambassador";
 			//activity 6
-			document.getElementById('text4689').value ="";
-			document.getElementById('text4635').value ="";
+			document.getElementById('text4689').value ="Depart from Campus";
+			document.getElementById('text4635').value ="10:30 a.m.";
 			document.getElementById('text4597').value ="";
 			document.getElementById('text4551').value ="";
 			//activity 7
 			document.getElementById('text4691').value ="";
 			document.getElementById('text4637').value ="";
+			document.getElementById('text4599').value ="";
+			document.getElementById('text4553').value ="";
+			//activity 8
+			document.getElementById('text4693').value ="";
+			document.getElementById('text4639').value ="";
+			document.getElementById('text4601').value ="";
+			document.getElementById('text4555').value ="";
+			//Activity 9
+			document.getElementById('text4695').value ="";
+			document.getElementById('text4641').value ="";
+			document.getElementById('text4603').value ="";
+			document.getElementById('text4557').value ="";
+			//activity 10
+			document.getElementById('text4697').value ="";
+			document.getElementById('text4643').value ="";
+			document.getElementById('text4605').value ="";
+			document.getElementById('text4559').value ="";
+		break;	
+		
+		case 12:
+			//Visit Type
+			document.getElementById('text598').value ="4* - PM";
+			//Arrival Time
+			document.getElementById('text3381').value ="1:00 p.m.";
+			//activity 1 (Activity, time, location, detail)
+			document.getElementById('text3321').value ="Arrive on Campus";
+			document.getElementById('text3341').value ="1:00 p.m.";
+			document.getElementById('text4581').value ="Haaga House";
+			document.getElementById('text4541').value ="- Lobby";
+			//activity 2
+			document.getElementById('text4681').value ="Information Session";
+			document.getElementById('text4627').value ="1:10 p.m.";
+			document.getElementById('text4589').value ="Haaga House";
+			document.getElementById('text4543').value ="- Presentation Room";
+			//activity 3
+			document.getElementById('text4683').value ="Family FAQ Session";
+			document.getElementById('text4629').value ="1:30 p.m.";
+			document.getElementById('text4591').value ="Haaga House";
+			document.getElementById('text4545').value ="- Presentation Room";
+			//activity 4
+			document.getElementById('text4685').value ="Student Panel";
+			document.getElementById('text4631').value ="1:30 p.m.";
+			document.getElementById('text4593').value ="Haaga House";
+			document.getElementById('text4547').value ="- Lobby";
+			//activity 5
+			document.getElementById('text4687').value ="Tour of Campus";
+			document.getElementById('text4633').value ="2:00 p.m.";
+			document.getElementById('text4595').value ="";
+			document.getElementById('text4549').value ="- with Student Ambassador";
+			//activity 6
+			document.getElementById('text4689').value ="Depart from Campus";
+			document.getElementById('text4635').value ="3:30 p.m.";
+			document.getElementById('text4597').value ="";
+			document.getElementById('text4551').value ="";
+			//activity 7
+			document.getElementById('text4691').value ="";
+			document.getElementById('text4637').value ="";
+			document.getElementById('text4599').value ="";
+			document.getElementById('text4553').value ="";
+			//activity 8
+			document.getElementById('text4693').value ="";
+			document.getElementById('text4639').value ="";
+			document.getElementById('text4601').value ="";
+			document.getElementById('text4555').value ="";
+			//Activity 9
+			document.getElementById('text4695').value ="";
+			document.getElementById('text4641').value ="";
+			document.getElementById('text4603').value ="";
+			document.getElementById('text4557').value ="";
+			//activity 10
+			document.getElementById('text4697').value ="";
+			document.getElementById('text4643').value ="";
+			document.getElementById('text4605').value ="";
+			document.getElementById('text4559').value ="";
+		break;	
+		
+		case 13:
+			//Visit Type
+			document.getElementById('text598').value ="4* - PM";
+			//Arrival Time
+			document.getElementById('text3381').value ="1:00 p.m.";
+			//activity 1 (Activity, time, location, detail)
+			document.getElementById('text3321').value ="Arrive on Campus";
+			document.getElementById('text3341').value ="1:00 p.m.";
+			document.getElementById('text4581').value ="Haaga House";
+			document.getElementById('text4541').value ="- Lobby";
+			//activity 2
+			document.getElementById('text4681').value ="Information Session";
+			document.getElementById('text4627').value ="1:10 p.m.";
+			document.getElementById('text4589').value ="Haaga House";
+			document.getElementById('text4543').value ="- Presentation Room";
+			//activity 3
+			document.getElementById('text4683').value ="Family FAQ Session";
+			document.getElementById('text4629').value ="1:30 p.m.";
+			document.getElementById('text4591').value ="Haaga House";
+			document.getElementById('text4545').value ="- Presentation Room";
+			//activity 4
+			document.getElementById('text4685').value ="Student Panel";
+			document.getElementById('text4631').value ="1:30 p.m.";
+			document.getElementById('text4593').value ="Haaga House";
+			document.getElementById('text4547').value ="- Lobby";
+			//activity 5
+			document.getElementById('text4687').value ="Tour of Campus";
+			document.getElementById('text4633').value ="2:00 p.m.";
+			document.getElementById('text4595').value ="";
+			document.getElementById('text4549').value ="- with Student Ambassador";
+			//activity 6
+			document.getElementById('text4689').value ="Optional Meeting";
+			document.getElementById('text4635').value ="3:30 p.m.";
+			document.getElementById('text4597').value ="";
+			document.getElementById('text4551').value ="- with";
+			//activity 7
+			document.getElementById('text4691').value ="Depart from Campus";
+			document.getElementById('text4637').value ="4:00 p.m.";
 			document.getElementById('text4599').value ="";
 			document.getElementById('text4553').value ="";
 			//activity 8
@@ -968,15 +1119,15 @@ function clearCVItinerary(){
 //-----------//Campus Visit Reservation View//-----------//
 
 function createCVReservationDateListener(){
-	if(checkViewFields(["date602Date","text598","text4421","text3381","text4061","text3983"])){
+	if(checkViewFields(["date602Date","text4421","text3381","text4061","text3983"])){
 		visitDate = document.getElementById("date602Date").value;
 		//Blank ability set through confirm box yes/no.
 		setViewTimer(checkCVResDateChange);
 		document.getElementById("date602Date").addEventListener("click",function(){clearDateField("date602Date");});
 		document.getElementById("date602Date").addEventListener("keydown",function(e){if( e.which == 9 ) {return;} else{ e.preventDefault(); alert("Please use date picker to set the date.");}});
-		document.getElementById("text598").addEventListener("change",setArrivalTime);
 		document.getElementById("text3983").addEventListener("change",function(){visitIndicatorChecks(2);});
 		document.getElementById("text4061").addEventListener("change",function(){visitIndicatorChecks(2);});
+		//document.getElementById("text598").addEventListener("change",setArrivalTime); - Removed for now since arrival time is different on different days. 
 		visitIndicatorChecks(2);
 
 		adjustVisitTypeDropdown();
@@ -1076,7 +1227,10 @@ function checkCVResDateChange(){
 
 }
 
-//used to set the arrival time when session type is selected
+/*used to set the arrival time when session type is selected -
+
+Removed for now as arrival times can be different on different days. 
+
 function setArrivalTime(){
 	switch (document.getElementById("text598").value){
 		case "Summer - AM":
@@ -1103,14 +1257,8 @@ function setArrivalTime(){
 		case "Group Visit - PM":
 			document.getElementById("text3381").value = "2:15 p.m.";
 			break;
-		case "Early Bird":
-			document.getElementById("text3381").value = "7:45 a.m.";
-			break;
 		case "Third Tour Friday":
 			document.getElementById("text3381").value = "3:15 p.m.";
-			break;
-		case "Twilight Tour":
-			document.getElementById("text3381").value = "5:00 p.m.";
 			break;
 		case "": //If they return to "select one", which is really blank.
 			document.getElementById("text3381").value = "";
@@ -1121,3 +1269,4 @@ function setArrivalTime(){
 	}
 
 }
+*/
